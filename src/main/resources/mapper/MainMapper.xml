@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.project.readers.repository.MainDAO">
+
+	<select id="getHotBoard" resultType="BoardDTO" parameterType="Integer">
+	SELECT
+			BOARD.BOARD_NUM
+			,BOARD.CAT_DOMAIN
+			,BOARD.CREATOR
+			,BOARD.TITLE
+			,BOARD.CONTENT
+			,BOARD.HIT
+			,BOARD.CRT_TM
+	FROM
+			TB_BOARD BOARD
+	ORDER BY 
+			CRT_TM DESC
+	FETCH FIRST #{mainViewImg}
+	ROWS ONLY
+	</select>
+	
+	<select id="getHotGallery" resultType="GalleryDTO" parameterType="Integer">
+	SELECT
+			GALLERY.GALLERY_NUM
+			,GALLERY.CAT_DOMAIN
+			,GALLERY.TITLE
+			,GALLERY.AUTHOR
+			,GALLERY.PUBLISHER
+			,GALLERY.CREATOR
+			,GALLERY.CRT_TM
+			,GALLERY.GOOD_CNT
+	FROM
+			TB_GALLERY GALLERY
+	INNER JOIN 
+			TB_POINT POINT
+	ON
+			GALLERY.GALLERY_NUM=POINT.GALLERY_NUM
+	ORDER BY 
+			CRT_TM DESC
+	FETCH FIRST #{mainViewImg}
+	ROWS ONLY
+	</select>
+
+
+</mapper>

@@ -1,13 +1,32 @@
 {{>layout/header}}
+
 <body>
-<h1>메인입니다.</h1>
-<hr/>
-<h1>네비 부분입니다.</h1>
-<hr/>
-<h1>책장 부분입니다.</h1>
-<hr/>
-<h1>책갈 부분입니다.</h1>
-<hr/>
-<footer>따로 뺄 예정입니다.</footer>
+
+	<h1>메인입니다.</h1>
+	<hr />
+	<hr />
+	<h1>책장 부분입니다.</h1>
+	<hr />
+	<h1>책갈 부분입니다.</h1>
+	<hr />
+	<footer>따로 뺄 예정입니다.</footer>
 </body>
+
 </html>
+<script>
+	$(() => {
+		console.log("메인화면입니다.");
+		$.ajax({
+			type: "GET",
+			url: "/"
+		}
+	)
+		.done((res) => {
+			console.log(res)
+		})
+		.fail((res, err, status) => {
+				console.log(err)
+			})
+	});
+
+</script>

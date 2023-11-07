@@ -7,7 +7,7 @@
 	<select id="getHotBoard" resultType="BoardDTO" parameterType="Integer">
 	SELECT
 			BOARD.BOARD_NUM
-			,BOARD.CAT_DOMAIN
+			,BOARD.CAT_NUM
 			,BOARD.CREATOR
 			,BOARD.TITLE
 			,BOARD.CONTENT
@@ -24,13 +24,13 @@
 	<select id="getHotGallery" resultType="GalleryDTO" parameterType="Integer">
 	SELECT
 			GALLERY.GALLERY_NUM
-			,GALLERY.CAT_DOMAIN
+			,GALLERY.CAT_NUM
 			,GALLERY.TITLE
 			,GALLERY.AUTHOR
 			,GALLERY.PUBLISHER
 			,GALLERY.CREATOR
 			,GALLERY.CRT_TM
-			,GALLERY.GOOD_CNT
+			,POINT.GOOD_CNT
 	FROM
 			TB_GALLERY GALLERY
 	INNER JOIN 
@@ -43,7 +43,7 @@
 	ROWS ONLY
 	</select>
 	
-	<select id="checkGuest" parameterType="Integer" resultType="Integer">
+	<select id="checkGuest" parameterType="String" resultType="String">
 	SELECT
 			VISITOR.IP
 	FROM
@@ -52,7 +52,7 @@
 			VISITOR.IP = #{guestIp}
 	</select>
 	
-	<select id="getLastVisitTime" parameterType="String" resultType="LastVisiteDTO">
+	<select id="getLastVisitTime" parameterType="String" resultType="VisitorDTO">
 	SELECT
 			VISITOR.IP
 			VISITOR.VISITE_TM
@@ -69,11 +69,13 @@
 			(
 			VISITOR_NUM
 			,IP
+			,VISITE_TM
 			)
 	VALUES
 			(
-			VISITE.NEXTVAL
+			TB_VISITOR_SEQ.NEXTVAL
 			,#{guestIp}
+			,SYSDATE
 			)
 	</insert>
 	
@@ -81,8 +83,8 @@
 	UPDATE
 			TB_VISITOR
 	SET
-			VISITE_HIT = VISITE_HIT + 1
-	WHERE
+			HIT = HIT + 1
+	WHERE 
 			IP = #{guestIp}
 	</update>
 	
@@ -93,7 +95,7 @@
 			TB_VISITOR VISITOR
 	</select>
 	
-	<select id="getDayVisiteCount" resultType="Integer" parameterType="LocalDateTime">
+	<select id="getDayVisiteCount" parameterType="String" resultType="Integer" >
 	SELECT
 			COUNT(VISITOR_NUM)
 	FROM
@@ -102,18 +104,18 @@
 			TO_DATE(VISITE_TM,'YYYY-MM-DD') = TO_DATE(#{nowTime},'YYYY-MM-DD')
 	</select>
 	
-	<select id="getWeekVisiteCount"  parameterType="String" resultType="VisiitorCountDTO">
+	<select id="getWeekVisiteCount"  parameterType="Map" resultType="VisitorCountDTO">
 	SELECT
 			TO_DATE(VISITE_TM, 'YYYY-MM-DD')AS DAY
-			COUNT(VISITOR_NUM) AS VISITOR_COUNT
+			,COUNT(VISITOR_NUM) AS VISITORCOUNT
 	FROM
-			TB VISITOR VISITOR
+			TB_VISITOR
 	WHERE
 			TO_DATE(VISITE_TM, 'YYYY-MM-DD')
 	BETWEEN 
-			TO_DATE(#{nowTime}, 'YYYY-MM-DD')
+			TO_DATE(#{today}, 'YYYY-MM-DD')
 	AND 
-			TO_DATE(#{nowTime}-6, 'YYYY-MM-DD')
+			TO_DATE(#{sixDayAgoDay}, 'YYYY-MM-DD')
 	GROUP BY
 			TO_DATE(VISITE_TM, 'YYYY-MM-DD')
 	ORDER BY

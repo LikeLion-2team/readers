@@ -1,6 +1,7 @@
 package com.project.readers.repository;
 
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -12,11 +13,11 @@ import com.project.readers.entity.VisitorDTO;
 @Mapper
 public interface MainDAO {
 
-	List<BoardDTO> getHotBoard(Integer mainViewImg);
+	List<BoardDTO> getHotBoard(Integer mainViewImg); //5개
 
-	List<GalleryDTO> getHotGallery(Integer mainViewImg);
+	List<GalleryDTO> getHotGallery(Integer mainViewImg); //5개
 
-	int checkGuest(String guestIp);
+	String checkGuest(String guestIp);
 	
 	void insertVisitor(String guestIp);
 
@@ -28,7 +29,7 @@ public interface MainDAO {
 
 	Integer getDayVisiteCount(String nowTime);
 
-	VisitorCountDTO getWeekVisiteCount(String nowTime);
+	List<VisitorCountDTO> getWeekVisiteCount(Map<String, String> insertValue);
 
 
 }

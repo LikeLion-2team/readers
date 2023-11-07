@@ -1,7 +1,7 @@
 package com.project.readers.controller;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,14 +18,14 @@ public class MainController {
 
 	@GetMapping("/")
 	public String viewMain(Model model) {
-		HashMap<String, List<?>> mainList = mainService.viewMain();
-		HashMap<String, Integer> totalVisiteCount = mainService.totalVisiteCount();
-		HashMap<String, Integer> dayVisiteCount = mainService.dayVisiteCount();
-		HashMap<String, VisitorCountDTO> weekVisitorCount = mainService.weekVisiteCount();
+		Map<String, List<?>> mainList = mainService.viewMain();
+		Map<String, Integer> totalVisiteCount = mainService.totalVisiteCount();
+		Map<String, Integer> dayVisiteCount = mainService.dayVisiteCount();
+		Map<String, List<VisitorCountDTO>> weekVisitorCount = mainService.weekVisiteCount();
 		model.addAttribute("mainList", mainList);
 		model.addAttribute("totalVisiteCount", totalVisiteCount);
 		model.addAttribute("dayVisiteCount", dayVisiteCount);
 		model.addAttribute("weekVisitorCount", weekVisitorCount);
-		return "index";
+		return "html/index";
 	}
 }

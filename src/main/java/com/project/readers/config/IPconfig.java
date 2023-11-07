@@ -15,7 +15,8 @@ public class IPconfig {
 		session.setAttribute(Constant.CLIENTIP, clientIp);
 	}
 	public static String getIp(HttpSession session) {
-		String clientIp = (String)session.getAttribute(Constant.CLIENTIP);
+//		String clientIp = (String)session.getAttribute(Constant.CLIENTIP);
+		String clientIp = "99999997";
 		return clientIp;
 	}
 }

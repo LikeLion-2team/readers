@@ -20,10 +20,9 @@ public class SessionConfig {
 	public static UserSessionDTO getSessionDTO() {
 //		HttpSession session = getSession();
 //		SessionDTO sessionDTO=(SessionDTO)session.getAttribute(ConstantConfig.USER_INFO);
-//		UserSessionDTO sessionDTO = new SessionDTO();
-//		sessionDTO.setId("admin");
-//		sessionDTO.setRoleNum(3);
-//		sessionDTO.setNickname("홍길동");
-		return null;
+		UserSessionDTO sessionDTO = new UserSessionDTO();
+		sessionDTO.setId("admin");
+		sessionDTO.setRoleNum(3);
+		return sessionDTO;
 	}
 }

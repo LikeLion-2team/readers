@@ -18,7 +18,11 @@ public class MainController {
 	@GetMapping("/")
 	public String viewMain(Model model) {
 		HashMap<String, List<?>>mainList= mainService.viewMain();
+		HashMap<String,Integer> totalVisiteCount = mainService.totalVisiteCount();
+		HashMap<String,Integer> dayVisiteCount = mainService.dayVisiteCount();
 		model.addAttribute("mainList", mainList);
+		model.addAttribute("totalVisiteCount", totalVisiteCount);
+		model.addAttribute("dayVisiteCount", dayVisiteCount);
 		return "index";
 	}
 }

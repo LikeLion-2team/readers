@@ -42,6 +42,64 @@
 	FETCH FIRST #{mainViewImg}
 	ROWS ONLY
 	</select>
-
-
+	
+	<select id="checkGuest" parameterType="Integer" resultType="Integer">
+	SELECT
+			VISITOR.IP
+	FROM
+			TB_VISITOR VISITOR
+	WHERE
+			VISITOR.IP = #{guestIp}
+	</select>
+	
+	<select id="getLastVisitTime" parameterType="String" resultType="LastVisiteDTO">
+	SELECT
+			VISITOR.IP
+			VISITOR.VISITE_TM
+	FROM
+			TB_VISITOR VISITOR
+	WHERE
+			VISITOR.IP = #{guestIp}
+	</select>
+	
+	
+	<insert id="insertVisitor" parameterType="String" >
+	INSERT INTO
+			TB_VISITOR
+			(
+			VISITOR_NUM
+			,IP
+			)
+	VALUES
+			(
+			VISITE.NEXTVAL
+			,#{guestIp}
+			)
+	</insert>
+	
+	<update id="countPlusVisist" parameterType="String">
+	UPDATE
+			TB_VISITOR
+	SET
+			VISITE_HIT = VISITE_HIT + 1
+	WHERE
+			IP = #{guestIp}
+	</update>
+	
+	<select id="getTotalVisiteCount" resultType="Integer">
+	SELECT
+			COUNT(VISITOR_NUM)
+	FROM
+			TB_VISITOR VISITOR
+	</select>
+	
+	<select id="getDayVisiteCount" resultType="String" parameterType="LocalDateTime">
+	SELECT
+			COUNT(VISITOR_NUM)
+	FROM
+			TB_VISITOR VISITOR
+	WHERE
+			TO_DATE(VISITE_TM,'YYYY-MM-DD') = TO_DATE(#{nowTime},'YYYY-MM-DD')
+	</select>
+	
 </mapper>

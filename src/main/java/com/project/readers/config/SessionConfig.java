@@ -13,6 +13,7 @@ public class SessionConfig {
 	public static HttpSession getSession() {
 		HttpServletRequest httpServletRequest = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 		HttpSession session = httpServletRequest.getSession();
+		IPconfig.getIp(session);
 		return session;
 	}
 

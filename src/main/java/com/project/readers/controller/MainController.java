@@ -8,21 +8,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import com.project.readers.entity.VisitorCountDTO;
 import com.project.readers.service.MainService;
 
 @Controller
 public class MainController {
 	@Autowired
 	private MainService mainService;
-	
+
 	@GetMapping("/")
 	public String viewMain(Model model) {
-		HashMap<String, List<?>>mainList= mainService.viewMain();
-		HashMap<String,Integer> totalVisiteCount = mainService.totalVisiteCount();
-		HashMap<String,Integer> dayVisiteCount = mainService.dayVisiteCount();
+		HashMap<String, List<?>> mainList = mainService.viewMain();
+		HashMap<String, Integer> totalVisiteCount = mainService.totalVisiteCount();
+		HashMap<String, Integer> dayVisiteCount = mainService.dayVisiteCount();
+		HashMap<String, VisitorCountDTO> weekVisitorCount = mainService.weekVisiteCount();
 		model.addAttribute("mainList", mainList);
 		model.addAttribute("totalVisiteCount", totalVisiteCount);
 		model.addAttribute("dayVisiteCount", dayVisiteCount);
+		model.addAttribute("weekVisitorCount", weekVisitorCount);
 		return "index";
 	}
 }

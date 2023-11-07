@@ -15,6 +15,7 @@ import com.project.readers.config.IPconfig;
 import com.project.readers.config.SessionConfig;
 import com.project.readers.entity.BoardDTO;
 import com.project.readers.entity.GalleryDTO;
+import com.project.readers.entity.VisitorCountDTO;
 import com.project.readers.entity.VisitorDTO;
 import com.project.readers.repository.MainDAO;
 
@@ -114,7 +115,17 @@ public class MainService {
 		resultMap = handleVisisteCount(totalVisitor);
 		return resultMap;
 	}
+	//7일간 방문자 수 가져오기
+	public HashMap<String, VisitorCountDTO>weekVisiteCount(){
+		HashMap<String, VisitorCountDTO> resultMap = new HashMap<>();
+		String nowTime = dateFormat();
+		VisitorCountDTO totalVisitor = mainDAO.getWeekVisiteCount(nowTime);
+		resultMap = handleWeekVisisteCount(totalVisitor);
+		return resultMap;
+	}
 	
+
+
 	//DATE 형식 변환 mapper 에러 주의
 	private String dateFormat() {
 		LocalDateTime nowTime = LocalDateTime.now();
@@ -131,6 +142,16 @@ public class MainService {
 			resultMap.put(Constant.SUCCESS_MESG, totalVisitor);
 		else
 			resultMap.put(resultMesg, Constant.MIN_VISITOR);
+		return resultMap;
+	}
+	//주간 방문자 DB결과 값 따른 리턴
+	private HashMap<String, VisitorCountDTO> handleWeekVisisteCount(VisitorCountDTO totalVisitor) {
+		HashMap<String, VisitorCountDTO> resultMap = new HashMap<>();
+		String resultMesg = Constant.FALSE_MESG;
+		if (totalVisitor.getVisitorCount()>Constant.MIN_VISITOR) 
+			resultMap.put(Constant.SUCCESS_MESG, totalVisitor);
+		else
+			resultMap.put(resultMesg, new VisitorCountDTO());
 		return resultMap;
 	}
 

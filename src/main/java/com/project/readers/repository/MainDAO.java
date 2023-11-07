@@ -6,6 +6,7 @@ import org.apache.ibatis.annotations.Mapper;
 
 import com.project.readers.entity.BoardDTO;
 import com.project.readers.entity.GalleryDTO;
+import com.project.readers.entity.VisitorCountDTO;
 import com.project.readers.entity.VisitorDTO;
 
 @Mapper
@@ -26,6 +27,8 @@ public interface MainDAO {
 	Integer getTotalVisiteCount();
 
 	Integer getDayVisiteCount(String nowTime);
+
+	VisitorCountDTO getWeekVisiteCount(String nowTime);
 
 
 }

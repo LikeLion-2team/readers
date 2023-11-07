@@ -93,7 +93,7 @@
 			TB_VISITOR VISITOR
 	</select>
 	
-	<select id="getDayVisiteCount" resultType="String" parameterType="LocalDateTime">
+	<select id="getDayVisiteCount" resultType="Integer" parameterType="LocalDateTime">
 	SELECT
 			COUNT(VISITOR_NUM)
 	FROM
@@ -102,4 +102,21 @@
 			TO_DATE(VISITE_TM,'YYYY-MM-DD') = TO_DATE(#{nowTime},'YYYY-MM-DD')
 	</select>
 	
+	<select id="getWeekVisiteCount"  parameterType="String" resultType="VisiitorCountDTO">
+	SELECT
+			TO_DATE(VISITE_TM, 'YYYY-MM-DD')AS DAY
+			COUNT(VISITOR_NUM) AS VISITOR_COUNT
+	FROM
+			TB VISITOR VISITOR
+	WHERE
+			TO_DATE(VISITE_TM, 'YYYY-MM-DD')
+	BETWEEN 
+			TO_DATE(#{nowTime}, 'YYYY-MM-DD')
+	AND 
+			TO_DATE(#{nowTime}-6, 'YYYY-MM-DD')
+	GROUP BY
+			TO_DATE(VISITE_TM, 'YYYY-MM-DD')
+	ORDER BY
+			TO_DATE(VISITE_TM, 'YYYY-MM-DD')
+	</select>
 </mapper>

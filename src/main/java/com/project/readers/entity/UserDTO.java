@@ -1,26 +1,26 @@
 package com.project.readers.entity;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.ToString;
 
-@ToString
 @Getter
 @Setter
 public class UserDTO {
-
-    // 아이디 번호 
-    private Long idNum;
-
-    // 아이디 
+    private Integer idNum;
+    @NotBlank
+    @Size(min = 1, max = 18)
     private String id;
-
-    // 비밀번호 
+    @NotBlank
+    @Size(min = 1, max = 128)
     private String pw;
-
-    // 이름 
+    @NotBlank
+    @Size(min = 1, max = 20)
     private String name;
-
-    // 이메일 
+    @NotBlank
+    @Size(min = 1, max = 100)
+    @Email
     private String email;
 }

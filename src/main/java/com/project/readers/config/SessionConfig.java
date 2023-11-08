@@ -17,12 +17,12 @@ public class SessionConfig {
 	}
 
 	public static UserSessionDTO getSessionDTO() {
-//		HttpSession session = getSession();
-//		SessionDTO sessionDTO=(SessionDTO)session.getAttribute(ConstantConfig.USER_INFO);
-//		UserSessionDTO sessionDTO = new SessionDTO();
-//		sessionDTO.setId("admin");
-//		sessionDTO.setRoleNum(3);
-//		sessionDTO.setNickname("홍길동");
-		return null;
+		HttpSession session = getSession();
+//		UserSessionDTO usersessionDTO = (UserSessionDTO)session.getAttribute(ConstantConfig.USER_INFO);
+		UserSessionDTO userSessionDTO = new UserSessionDTO();
+		userSessionDTO.setId("admin");
+		userSessionDTO.setRoleNum(3);
+
+		return userSessionDTO;
 	}
 }

@@ -4,6 +4,82 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.readers.repository.BoardDAO">
 
-	
+	<insert id="createBoard" parameterType="BoardDTO">
 
+        INSERT INTO TB_BOARD(BOARD_NUM, CAT_NUM, CREATOR, TITLE, CONTENT, CRT_TM)
+        VALUES(TB_BOARD_NUM_SEQ.NEXTVAL, 2, #{creator}, #{title}, #{content}, SYSDATE)
+
+	</insert>
+
+    <!-- 조회수 증가 : increase -->
+
+    <update id="increase">
+
+        update tb_board
+
+        set hit = hit + 1
+
+        where boardNum = #{boardNum}
+
+    </update>
+    
+    <select id="getBoardCount" resultType="Integer" parameterType="BoardDTO">
+
+        SELECT COUNT(*)
+            FROM TB_BOARD BOARD
+
+    </select>
+
+
+    <select id="getBoardList" resultType="BoardDTO" parameterType="BoardDTO">
+
+        SELECT
+            BOARD.BOARD_NUM
+             ,BOARD.CAT_NUM
+             ,BOARD.CREATOR
+             ,BOARD.TITLE
+             ,BOARD.HIT
+             ,BOARD.CRT_TM
+        FROM
+            (SELECT BOARD.BOARD_NUM
+                  ,BOARD.CAT_NUM
+                  ,BOARD.CREATOR
+                  ,BOARD.TITLE
+                  ,BOARD.HIT
+                  ,BOARD.CRT_TM
+                  ,ROW_NUMBER() OVER(ORDER BY BOARD_NUM DESC) AS rnum
+                ,CEIL(ROW_NUMBER() OVER(ORDER BY BOARD_NUM DESC)/10)-1 AS pg
+             FROM TB_BOARD BOARD
+             WHERE BOARD.CAT_NUM = 2
+            )BOARD
+        WHERE pg = #{pg}
+        ORDER BY
+            CRT_TM DESC
+
+    </select>
+
+    <select id="getBoardOne" resultType="BoardDTO" parameterType="BoardDTO">
+
+        SELECT
+            BOARD.BOARD_NUM
+            ,BOARD.CAT_NUM
+            ,BOARD.CREATOR
+            ,BOARD.TITLE
+            ,BOARD.CONTENT
+            ,BOARD.HIT
+            ,BOARD.CRT_TM
+        FROM
+            TB_BOARD BOARD
+        WHERE BOARD.BOARD_NUM = #{boardNum}
+    </select>
+
+    <delete id="deleteBoard">
+        DELETE FROM TB_BOARD BOARD WHERE BOARD.BOARD_NUM = #{boardNum}
+    </delete>
+
+    <update id="updateBoard">
+        UPDATE TB_BOARD BOARD
+            SET BOARD.TITLE = #{title}, BOARD.CONTENT = #{content}
+            WHERE BOARD.BOARD_NUM = #{boardNum}
+    </update>
 </mapper>

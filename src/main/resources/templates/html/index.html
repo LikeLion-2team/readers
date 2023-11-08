@@ -1,32 +1,141 @@
 {{>layout/header}}
+<style>
+	.slider-container {
+		border: 10px solid brown;
+		/* 전체 슬라이더 컨테이너에 브라운 보더 추가 */
+		overflow: hidden;
+		width: 800px;
+		margin: auto;
+	}
+
+	.slider-inner {
+		white-space: nowrap;
+		transition: transform 0.3s ease-out;
+		/* 컨테이너와 이미지 사이의 간격을 위한 패딩 */
+	}
+
+	.slider-inner img {
+		width: calc(33.333% - 20px);
+		/* 이미지 사이의 간격을 고려하여 너비 조정 */
+		width: 245px;
+		/* 이미지의 너비를 200px로 설정 */
+		height: 400px;
+		/* 이미지의 높이를 200px로 설정 */
+		border: 4px solid rgb(117, 30, 30);
+		/* 각 이미지에 브라운 보더 추가 */
+		margin: 5px;
+		/* 오른쪽 마진만 추가 */
+		margin-right: 5px;
+		/* 이미지 사이의 간격 */
+		box-sizing: border-box;
+		/* 테두리와 padding이 너비에 포함되도록 설정 */
+		display: inline-block;
+		vertical-align: top;
+		/* 이미지를 상단에 정렬 */
+		object-fit: cover;
+	}
+</style>
 
 <body>
-
 	<h1>메인입니다.</h1>
 	<hr />
-	<hr />
+	{{mainList.galleryList}}
+	<div class="slider-container" id="gallery-Hot-5">
+		<div class="slider-inner" id="galleryImgs">
+			<img id="galleryImg-1" src="images/book/1.jpeg" alt="dummy1">
+			<img id="galleryImg-2" src="images/book/2.jpeg" alt="dummy2">
+			<img id="galleryImg-3" src="images/book/3.jpeg" alt="dummy3">
+			<img id="galleryImg-4" src="images/book/4.jpeg" alt="dummy4">
+			<img id="galleryImg-5" src="images/book/5.jpeg" alt="dummy5">
+			<!-- 복사 이미지 -->
+			<img id="galleryImg-6" src="images/book/1.jpeg" alt="dummy1">
+			<img id="galleryImg-7" src="images/book/2.jpeg" alt="dummy2">
+		</div>
+	</div>
 	<h1>책장 부분입니다.</h1>
 	<hr />
-	<h1>책갈 부분입니다.</h1>
+	{{mainList.boardList}}
+	<h1>책갈피 부분입니다.</h1>
 	<hr />
-	<footer>따로 뺄 예정입니다.</footer>
+	<h1>따로 호출해서 차트 넣어야하는 부분 ajax로</h1>
+	<hr />
+	{{>layout/footer}}
 </body>
 
 </html>
 <script>
 	$(() => {
-		console.log("메인화면입니다.");
-		$.ajax({
-			type: "GET",
-			url: "/"
-		}
-	)
-		.done((res) => {
-			console.log(res)
-		})
-		.fail((res, err, status) => {
-				console.log(err)
-			})
-	});
+		const sliderInner = $("#galleryImgs");
+		const totalImages = sliderInner.children().length - 2; // 마지막 두 이미지(복제된 이미지)를 제외한 총 이미지 수
+		const imageWidth = sliderInner.find('img').first().outerWidth(true); // 이미지 너비 + 마진
+		const totalWidth = imageWidth * totalImages;
+		sliderInner.width(totalWidth); // 전체 슬라이더 너비 설정
 
+		let currentIndex = 0;
+		let isDragging = false;
+		let startPos = 0;
+		let currentTranslate = 0;
+		let animationInterval;
+
+		// 이미지 슬라이드 함수
+		function slideImage(index, noAnimation = false) {
+			if (noAnimation) {
+				sliderInner.css("transition", "none");
+			} else {
+				sliderInner.css("transition", "transform 0.3s ease-out");
+			}
+			currentTranslate = -index * imageWidth;
+			sliderInner.css("transform", `translateX(${currentTranslate}px)`);
+
+			// 순환 로직
+			if (index >= totalImages - 2) { // 마지막 이미지에 도달했을 때
+				currentIndex = 0; // 첫 번째 이미지로 인덱스 재설정
+				setTimeout(() => slideImage(currentIndex, false), 300); // 애니메이션 없이 즉시 첫 번째 이미지로 전환
+			}
+		}
+
+		// 자동 슬라이드 시작 함수
+		function startAutoSlide() {
+			animationInterval = setInterval(() => {
+				currentIndex++;
+				if (currentIndex >= totalImages ) { // 마지막 이미지를 넘어서면
+					currentIndex = 0; // 첫 번째 이미지로 리셋
+					slideImage(currentIndex, false); // 애니메이션 없이 즉시 전환
+				} else {
+					slideImage(currentIndex); // 정상적으로 다음 이미지로 슬라이드
+				}
+			}, 3000); // 3초마다 실행
+		}
+
+		// 자동 슬라이드 중지 함수
+		function stopAutoSlide() {
+			clearInterval(animationInterval);
+		}
+
+		// 자동 슬라이드 시작
+		startAutoSlide();
+
+		
+
+		// 차트 호출 테스트
+		console.log("차트 호출 함수 진행 중입니다.");
+		$.ajax({
+			url: "/chart",
+			method: "get",
+			dataType: "json",
+			data: {
+				totalVisiteCount: "totalVisiteCount",
+				dayVisiteCount: "dayVisiteCount",
+				weekVisitorCount: "weekVisitorCount",
+			}
+		})
+			.done((res) => {
+				console.log(res);
+			})
+			.fail((res, err, status) => {
+				console.log("fail res : " + res);
+				console.log("fail err : " + err);
+				console.log("fail status : " + status); // 오타 수정: staus -> status
+			});
+	});
 </script>

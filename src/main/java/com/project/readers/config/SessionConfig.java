@@ -3,6 +3,7 @@ package com.project.readers.config;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import com.project.readers.common.Constant;
 import com.project.readers.entity.UserSessionDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -19,11 +20,7 @@ public class SessionConfig {
 
 	public static UserSessionDTO getSessionDTO() {
 		HttpSession session = getSession();
-//		UserSessionDTO usersessionDTO = (UserSessionDTO)session.getAttribute(ConstantConfig.USER_INFO);
-		UserSessionDTO userSessionDTO = new UserSessionDTO();
-		userSessionDTO.setId("admin");
-		userSessionDTO.setRoleNum(3);
-
-		return userSessionDTO;
+		UserSessionDTO usersessionDTO = (UserSessionDTO)session.getAttribute(Constant.USER_INFO);
+		return usersessionDTO;
 	}
 }

@@ -71,4 +71,30 @@
 		select count(*) from tb_gallery
 	</select>
 	
+	<select id="searchByTitle" parameterType="String" resultType="GalleryDTO">
+		select 
+			gallery_num
+    		,cat_num
+    		,title
+    		,author
+    		,publisher
+    		,creator
+    		,crt_tm
+    	from tb_gallery
+    	where title like '%#{keyword}%'
+	</select>
+	
+	<select id="searchByAuthor" parameterType="String" resultType="GalleryDTO">
+		select 
+			gallery_num
+    		,cat_num
+    		,title
+    		,author
+    		,publisher
+    		,creator
+    		,crt_tm
+    	from tb_gallery
+    	where author like '%#{keyword}%'
+	</select>
+	
 </mapper>

@@ -71,7 +71,7 @@
 		select count(*) from tb_gallery
 	</select>
 	
-	<select id="searchByTitle" parameterType="String" resultType="GalleryDTO">
+	<select id="searchByTitle" parameterType="GalleryDTO" resultType="GalleryDTO">
 		select 
 			gallery_num
     		,cat_num
@@ -80,11 +80,26 @@
     		,publisher
     		,creator
     		,crt_tm
-    	from tb_gallery
-    	where title like '%#{keyword}%'
+    	from 
+    	(
+	    	select 
+	    		gallery_num
+	  			,cat_num
+	  			,title
+	  			,author
+	    		,publisher
+	    		,creator
+	    		,crt_tm
+	    		,ceil(row_number() over(order by gallery_num desc)/10)-1 as pg
+	    	from tb_gallery
+	    	where title like '%' || #{searchKey} || '%'
+        )
+    	where pg = #{pg}
+        order by
+            crt_tm desc
 	</select>
 	
-	<select id="searchByAuthor" parameterType="String" resultType="GalleryDTO">
+	<select id="searchByAuthor" parameterType="GalleryDTO" resultType="GalleryDTO">
 		select 
 			gallery_num
     		,cat_num
@@ -93,8 +108,23 @@
     		,publisher
     		,creator
     		,crt_tm
-    	from tb_gallery
-    	where author like '%#{keyword}%'
+   		from 
+    	(
+	    	select 
+	    		gallery_num
+	  			,cat_num
+	  			,title
+	  			,author
+	    		,publisher
+	    		,creator
+	    		,crt_tm
+	    		,ceil(row_number() over(order by gallery_num desc)/10)-1 as pg
+	    	from tb_gallery
+	    	where author like '%' || #{searchKey} || '%'
+        )
+    	where pg = #{pg}
+        order by
+            crt_tm desc
 	</select>
 	
 </mapper>

@@ -34,11 +34,12 @@ public class GalleryController {
 	String domain;
 
 	@GetMapping("/list/{pg}")
-	public String showList(@PathVariable
-	int pg, Model model) {
-		List<GalleryDTO> bookList = galleryService.getList();
-		String page = Pager.makePage(10, 100, pg);
-
+	public String showList(@PathVariable int pg, Model model) {
+		GalleryDTO galleryDTO = new GalleryDTO();
+		galleryDTO.setPg(pg);
+		List<GalleryDTO> bookList = galleryService.getList(galleryDTO);
+		String page = Pager.makePage(10, galleryService.getGalleryCount(), pg);
+		
 		model.addAttribute("bookList", bookList);
 		model.addAttribute("page", page);
 		return "/gallery/gallery_list";
@@ -72,7 +73,6 @@ public class GalleryController {
 		resultMap.put("resultMsg", saveGalleryMap.get("resultMsg"));
 		resultMap.put("galleryNum", saveGalleryMap.get("galleryNum"));
 		
-		
 		return resultMap;
 	}
 	
@@ -81,7 +81,7 @@ public class GalleryController {
 	public HashMap<String, Object> saveFile(MultipartFile file, String fileName) {
 		HashMap<String, Object> resultMap = new HashMap<>();
 		HashMap<String, Object> saveFileMap = galleryService.saveFile(file, fileName);
-		System.out.println("file name: "+fileName);
+		System.out.println("file name: " + fileName);
 		resultMap.put("resultMsg", saveFileMap.get("resultMsg"));
 		resultMap.put("fileName", saveFileMap.get("fileName"));
 		resultMap.put("imageUrl", saveFileMap.get("imageUrl"));

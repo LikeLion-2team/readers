@@ -27,7 +27,7 @@ public class UserController {
     @PostMapping("/register")
     public String registerUser(@Valid UserDTO userDTO) {
         userService.registerUser(userDTO);
-        return "redirect:/index";
+        return "redirect:html/index";
     }
 
     @GetMapping("/login")

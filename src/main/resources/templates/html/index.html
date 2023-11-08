@@ -25,9 +25,44 @@
 		object-fit: cover;
 	}
 </style>
+<style>
+	body,
+	html {
+		margin: 0;
+		padding: 0;
+		height: 100%;
+		overflow: hidden;
+	}
+
+	.container {
+		display: flex;
+		min-height: 100vh;
+	}
+
+	.main-content {
+		flex-grow: 1;
+		height: 100vh;
+		overflow: auto;
+	}
+
+	.sidebar {
+		width: 250px;
+		background-color: rgb(0, 128, 0);
+		padding: 20px;
+		overflow-y: auto;
+		height: 100vh;
+		box-sizing: border-box;
+		position: fixed;
+		right: 0;
+		top: 0;
+	}
+</style>
 
 <body>
 	<h1>메인입니다.</h1>
+	<div class="sidebar">
+		<div>사이드바</div>
+	</div>
 	<hr />
 	{{mainList.galleryList}}
 	<div class="slider-container" id="gallery-Hot-5">
@@ -55,10 +90,10 @@
 <script>
 	$(() => {
 		const sliderInner = $("#galleryImgs");
-		const totalImages = sliderInner.children().length - 2; 
-		const imageWidth = sliderInner.find('img').first().outerWidth(true); 
+		const totalImages = sliderInner.children().length - 2;
+		const imageWidth = sliderInner.find('img').first().outerWidth(true);
 		const totalWidth = imageWidth * totalImages;
-		sliderInner.width(totalWidth); 
+		sliderInner.width(totalWidth);
 
 		let currentIndex = 0;
 		let isDragging = false;
@@ -66,7 +101,7 @@
 		let currentTranslate = 0;
 		let animationInterval;
 
-		
+
 		function slideImage(index, noAnimation = false) {
 			if (noAnimation) {
 				sliderInner.css("transition", "none");
@@ -77,9 +112,9 @@
 			sliderInner.css("transform", `translateX(${currentTranslate}px)`);
 
 			// 순환 로직
-			if (index >= totalImages - 2) { 
-				currentIndex = 0; 
-				setTimeout(() => slideImage(currentIndex, false), 300); 
+			if (index >= totalImages - 2) {
+				currentIndex = 0;
+				setTimeout(() => slideImage(currentIndex, false), 300);
 			}
 		}
 
@@ -87,24 +122,24 @@
 		function startAutoSlide() {
 			animationInterval = setInterval(() => {
 				currentIndex++;
-				if (currentIndex >= totalImages ) { 
-					currentIndex = 0; 
-					slideImage(currentIndex, false); 
+				if (currentIndex >= totalImages) {
+					currentIndex = 0;
+					slideImage(currentIndex, false);
 				} else {
-					slideImage(currentIndex); 
+					slideImage(currentIndex);
 				}
-			}, 3000); 
+			}, 3000);
 		}
 
-		
+
 		function stopAutoSlide() {
 			clearInterval(animationInterval);
 		}
 
-		
+
 		startAutoSlide();
 
-		
+
 
 		// 차트 호출 테스트
 		console.log("차트 호출 함수 진행 중입니다.");

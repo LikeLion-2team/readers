@@ -27,7 +27,7 @@ public interface MainDAO {
 
 	Integer getTotalVisiteCount();
 
-	Integer getDayVisiteCount(String nowTime);
+	Integer getDayVisiteCount();
 
 	List<VisitorCountDTO> getWeekVisiteCount(Map<String, String> insertValue);
 

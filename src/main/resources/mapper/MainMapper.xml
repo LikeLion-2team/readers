@@ -55,7 +55,7 @@
 	<select id="getLastVisitTime" parameterType="String" resultType="VisitorDTO">
 	SELECT
 			VISITOR.IP
-			VISITOR.VISITE_TM
+			,VISITOR.VISITE_TM
 	FROM
 			TB_VISITOR VISITOR
 	WHERE
@@ -95,13 +95,13 @@
 			TB_VISITOR VISITOR
 	</select>
 	
-	<select id="getDayVisiteCount" parameterType="String" resultType="Integer" >
+	<select id="getDayVisiteCount" resultType="Integer" >
 	SELECT
 			COUNT(VISITOR_NUM)
 	FROM
 			TB_VISITOR VISITOR
 	WHERE
-			TO_DATE(VISITE_TM,'YYYY-MM-DD') = TO_DATE(#{nowTime},'YYYY-MM-DD')
+			TO_DATE(VISITE_TM,'YYYY-MM-DD') = TO_DATE(CURRENT_DATE,'YYYY-MM-DD')
 	</select>
 	
 	<select id="getWeekVisiteCount"  parameterType="Map" resultType="VisitorCountDTO">

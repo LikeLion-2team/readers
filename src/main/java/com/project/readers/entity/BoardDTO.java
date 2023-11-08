@@ -1,31 +1,36 @@
 package com.project.readers.entity;
 
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import com.project.readers.common.BaseDTO;
+import jakarta.validation.constraints.NotEmpty;
+import lombok.*;
 
-@ToString
-@Getter
-@Setter
-public class BoardDTO {
+import java.time.LocalDate;
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
+public class BoardDTO extends BaseDTO {
 
     // 게시글 번호 
-    private Long boardNum;
+    private Integer boardNum;
 
     // 카테고리 도메인 
-    private String catDomain;
+    private Integer catNum;
 
     // 작성자 
     private String creator;
 
-    // 제목 
+    // 제목
+    @NotEmpty
     private String title;
 
-    // 내용 
+    // 내용
+    @NotEmpty
     private String content;
 
     // 조회수 
-    private int hit;
+    private Long hit;
 
-	
+    // 작성일
+    private LocalDate crtTm;
 }

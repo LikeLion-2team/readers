@@ -1,5 +1,7 @@
 package com.project.readers.entity;
 
+import com.project.readers.common.BaseDTO;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -7,27 +9,24 @@ import lombok.ToString;
 @ToString
 @Getter
 @Setter
-public class GalleryDTO {
+public class GalleryDTO extends BaseDTO {
 
-    // 갤러리 번호 
-    private Long galleryNum;
+	// 갤러리 번호 
+	private Long galleryNum = 0L;
 
-    // 카테고리 도메인 
-    private String catDomain;
+	// 카테고리 도메인 
+	private int catNum = 0;
 
-    // 제목 
-    private String title;
+	// 제목 
+	private String title = "";
 
-    // 저자 
-    private String author;
+	// 저자 
+	private String author = "";
 
-    // 출판사 
-    private String publisher;
+	// 출판사 
+	private String publisher = "";
 
-    // 작성자 
-    private String creator;
-
-    // 점수 번호 
-    private int pointNum;
+	// 작성자 
+	private String creator = "";
 
 }

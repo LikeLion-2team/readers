@@ -31,8 +31,9 @@ public class MainService {
 
 	// 메인 화면
 	public Map<String, List<?>> viewMain() {
-		checkVisistCount();
+//		checkVisistCount();
 		List<GalleryDTO> getGallery = getHotGallery(Constant.MAIN_VIEW_IMG);
+		System.err.println(getGallery.size());
 		List<BoardDTO> getBoard = getHotBoard(Constant.MAIN_VIEW_IMG);
 		Map<String, List<?>> viewMain = handleViewMain(getGallery, getBoard);
 		return viewMain;

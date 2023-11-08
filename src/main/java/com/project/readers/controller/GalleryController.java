@@ -34,11 +34,13 @@ public class GalleryController {
 	String domain;
 
 	@GetMapping("/list/{pg}")
-	public String showList(@PathVariable int pg, Model model) {
+	public String showList(@PathVariable int pg, Model model, String keyword) {
 		GalleryDTO galleryDTO = new GalleryDTO();
 		galleryDTO.setPg(pg);
+		galleryDTO.setSearchKey(keyword);
+		
 		List<GalleryDTO> bookList = galleryService.getList(galleryDTO);
-		String page = Pager.makePage(10, galleryService.getGalleryCount(), pg);
+		String page = Pager.makePage(9, galleryService.getGalleryCount(), pg);
 		
 		model.addAttribute("bookList", bookList);
 		model.addAttribute("page", page);

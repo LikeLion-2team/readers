@@ -32,10 +32,6 @@ public class MainController {
 		Map<String, Integer> totalVisiteCount = mainService.totalVisiteCount();
 		Map<String, Integer> dayVisiteCount = mainService.dayVisiteCount();
 		Map<String, List<VisitorCountDTO>> weekVisitorCount = mainService.weekVisiteCount();
-		//숫자,숫자,리스트를 바로 넘겨줘 맵을 한번 덜 감싸게.
-		//service value resulemesg 맵에
-		//서비스 단 맵을 단을 컨트롤에 결과 넘겨주면 컨트롤단에
-		//
 		resultMap.put("totalVisiteCount", totalVisiteCount);
 		resultMap.put("dayVisiteCount", dayVisiteCount);
 		resultMap.put("weekVisitorCount", weekVisitorCount);

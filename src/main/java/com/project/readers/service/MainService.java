@@ -1,12 +1,16 @@
 package com.project.readers.service;
 
+import java.sql.Date;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.sql.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -31,9 +35,8 @@ public class MainService {
 
 	// 메인 화면
 	public Map<String, List<?>> viewMain() {
-//		checkVisistCount();
+		checkVisistCount();
 		List<GalleryDTO> getGallery = getHotGallery(Constant.MAIN_VIEW_IMG);
-		System.err.println(getGallery.size());
 		List<BoardDTO> getBoard = getHotBoard(Constant.MAIN_VIEW_IMG);
 		Map<String, List<?>> viewMain = handleViewMain(getGallery, getBoard);
 		return viewMain;
@@ -42,9 +45,6 @@ public class MainService {
 	// DB 결과 값 확인
 	private Map<String, List<?>> handleViewMain(List<GalleryDTO> getGallery, List<BoardDTO> getBoard) {
 		Map<String, List<?>> resultMap = new HashMap<>();
-		String id = SessionConfig.getSessionDTO().getId();
-		BoardDTO boardDTO = new BoardDTO();
-		boardDTO.setCreator(id);
 		String resultMesg = Constant.FALSE_MESG;
 		if (!getGallery.isEmpty() && !getBoard.isEmpty()) {
 			resultMesg = Constant.SUCCESS_MESG;
@@ -61,10 +61,12 @@ public class MainService {
 	private void checkVisistCount() {
 		String guestIp = IPconfig.getIp(SessionConfig.getSession());
 		String newUser = mainDAO.checkGuest(guestIp); // 첫 방문자인지 아니면 처음 방문자가 아닌지 확인
-		if (newUser != Constant.SEARCH_SAME_VALUE.toString())
+		if (!guestIp.equals(newUser))
 			mainDAO.insertVisitor(guestIp); // 방문자 추가
 		else
-			updateGuest(guestIp); // 방문자 업데이트
+			updateGuest(guestIp);
+//		else
+//			throw new IllegalArgumentException(Constant.UNKNOWN_ACCESS);
 	}
 
 	// 재방문자 업데이트 하루에 한번만 하도록
@@ -81,19 +83,35 @@ public class MainService {
 	private VisitorDTO handleVsitor(String guestIp) {
 		VisitorDTO visitor = new VisitorDTO();
 		DATE nowTime = new DATE(new Date(System.currentTimeMillis()));
-		// 기억하자 Oracle 날짜 변함함수
+		// 전자 Oracle DATE 후자 java Date
 		visitor.setIp(guestIp);
 		visitor.setVisiteTm(nowTime);
 		return visitor;
 	}
 
-	// 방문 시간 비교.
 	// Oralce: DATE 포맷 = HH.MI.SSXFF AM 타임 포맷 오류 날시 DTO에서 변경
-	// Oracle.Date 가져왔고
 	private boolean compareUpdateGuest(VisitorDTO lastVisiteDTO, VisitorDTO visitor) {
-		if (lastVisiteDTO.getVisiteTm() == visitor.getVisiteTm())
+		LocalDateTime date = converterToTime(lastVisiteDTO.getVisiteTm());
+		LocalDateTime compareDate = converterToTime(visitor.getVisiteTm());
+		Duration duration = Duration.between(date, compareDate);
+		if (duration.toDays() <= 1)
 			return true;
+
 		return false;
+	}
+
+	
+	public LocalDateTime converterToTime(DATE date) {
+		if (date == null) {
+			date = new DATE(new Timestamp(System.currentTimeMillis()));
+		}
+		LocalDateTime localDateTime = LocalDateTime.now();
+		try {
+			localDateTime = date.toLocalDateTime();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return localDateTime;
 	}
 
 	// 보드 게시판 불러오기
@@ -119,9 +137,7 @@ public class MainService {
 	// 하루 방문자 수 가져오기
 	public Map<String, Integer> dayVisiteCount() {
 		Map<String, Integer> resultMap = new HashMap<>();
-		LocalDateTime nowTime = LocalDateTime.now();
-		String nowDay = dateFormat(nowTime);
-		Integer totalVisitor = mainDAO.getDayVisiteCount(nowDay);
+		Integer totalVisitor = mainDAO.getDayVisiteCount();
 		resultMap = handleVisisteCount(totalVisitor);
 		return resultMap;
 	}
@@ -129,13 +145,13 @@ public class MainService {
 	// 7일간 방문자 수 가져오기
 	public Map<String, List<VisitorCountDTO>> weekVisiteCount() {
 		Map<String, List<VisitorCountDTO>> resultMap = new HashMap<>();
-		Map<String, String>insertValue = inserWeekVisiteValue();
+		Map<String, String> insertValue = inserWeekVisiteValue();
 		List<VisitorCountDTO> totalVisitor = mainDAO.getWeekVisiteCount(insertValue);
 		resultMap = handleWeekVisisteCount(totalVisitor);
 		return resultMap;
 	}
-	
-	//급하면 쓰는구나;;
+
+	// 급하면 쓰는구나;;
 	private Map<String, String> inserWeekVisiteValue() {
 		Map<String, String> insertMap = new HashMap<>();
 		LocalDateTime nowTime = LocalDateTime.now();

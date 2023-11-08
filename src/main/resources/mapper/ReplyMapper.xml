@@ -4,6 +4,49 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.readers.repository.ReplyDAO">
 
-	
+	<select id="getReplyList" resultType="ReplyDTO" parameterType="ReplyDTO">
+        SELECT REPLY.BOARD_NUM,
+                REPLY.RPL_NUM,
+                REPLY.CREATOR,
+                REPLY.RPL_CONTENT,
+                REPLY.DEPTH,
+                REPLY.CRT_TM,
+                REPLY.UP_TM
+        FROM
+            TB_REPLY REPLY
+        WHERE REPLY.BOARD_NUM = #{boardNum}
+        ORDER BY REPLY.CRT_TM DESC
+    </select>
 
+    <select id="getReplyOne" resultType="ReplyDTO" parameterType="ReplyDTO">
+
+        SELECT REPLY.BOARD_NUM,
+               REPLY.RPL_NUM,
+               REPLY.CREATOR,
+               REPLY.RPL_CONTENT,
+               REPLY.DEPTH,
+               REPLY.CRT_TM,
+               REPLY.UP_TM
+        FROM
+            TB_REPLY REPLY
+        WHERE REPLY.RPL_NUM = #{rplNum}
+    </select>
+
+    <insert id="createReply" parameterType="ReplyDTO">
+
+        INSERT INTO TB_REPLY REPLY
+            (BOARD_NUM, RPL_NUM, CREATOR, RPL_CONTENT,DEPTH, CRT_TM)
+        VALUES (#{boardNum},TB_REPLY_SEQ.NEXTVAL, #{creator}, #{rplContent}, #{depth}, SYSDATE)
+    </insert>
+
+    <update id="updateReply" >
+        UPDATE TB_REPLY REPLY
+            SET REPLY.RPL_CONTENT = #{rplContent},
+                REPLY.UP_TM = SYSDATE
+        WHERE  REPLY.RPL_NUM = #{rplNum}
+    </update>
+
+    <delete id="deleteReply" >
+        DELETE FROM TB_REPLY REPLY WHERE REPLY.RPL_NUM = #{rplNum}
+    </delete>
 </mapper>

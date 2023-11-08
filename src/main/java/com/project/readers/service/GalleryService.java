@@ -31,8 +31,8 @@ public class GalleryService {
 	
 	private final GalleryDAO galleryDAO;
 	
-	public List<GalleryDTO> getList() {
-		List<GalleryDTO> items = galleryDAO.getList();
+	public List<GalleryDTO> getList(GalleryDTO galleryDTO) {
+		List<GalleryDTO> items = galleryDAO.getList(galleryDTO);
 		return items;
 	}
 	
@@ -71,5 +71,9 @@ public class GalleryService {
 		resultMap.put("fileName", fileName);
 		resultMap.put("imageUrl", domain + "/" + fileUploadPath + "/" + fileName);
 		return resultMap;
+	}
+
+	public int getGalleryCount() {
+		return galleryDAO.getGalleryCount();
 	}
 }

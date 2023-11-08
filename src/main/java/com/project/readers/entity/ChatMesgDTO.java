@@ -18,4 +18,6 @@ public class ChatMesgDTO {
     // 메세지 내용 
     private String mesgContent;
 
+    private String id;
+
 }

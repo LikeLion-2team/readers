@@ -4,6 +4,9 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.readers.repository.ChatMesgDAO">
 
-	
+    <insert id="insertChatMesg" parameterType="ChatMesgDTO">
+        INSERT INTO TB_CHATMESG (MESG_ID, CHAT_ROOM_ID, MESG_CONTENT, SEND_TM, ID)
+        VALUES (TB_CHATMESG_SEQ.NEXTVAL, #{chatRoomId}, #{mesgContent}, SYSDATE, #{id})
+    </insert>
 
 </mapper>

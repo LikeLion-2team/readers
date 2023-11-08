@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Chat</title>
+  <!-- 테일윈드 불러오기 -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script src="/webjars/jquery/jquery.min.js"></script>
+  <script src="/webjars/sockjs-client/sockjs.min.js"></script>
+  <script src="/webjars/stomp-websocket/stomp.min.js"></script>
+
+  <style>
+    .message-container {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .message {
+      margin: 5px;
+      padding: 10px;
+      border-radius: 10px;
+      max-width: 70%;
+      background-color: #4F886D;
+      color: white;
+    }
+  </style>
+</head>
+<body>
+
+<div class="h-full flex flex-col">
+  <div class="flex flex-row justify-between items-center mb-5">
+    <div class="font-semibold text-2xl text-[#4F886D]">실시간 채팅방입니다.</div>
+    <button id="disconnect" class="bg-[#4F886D] text-white py-1 px-2 rounded">종료하기</button>
+  </div>
+
+  <!-- 메시지 컨테이너 -->
+  <div id="message-container" class="message-container">
+  </div>
+
+  <input type="text" id="roomid" value="{{chatRoomDTO.id}}" />
+
+  <!-- 메시지 입력 및 전송 버튼 -->
+  <div class="p-4 bg-white border-t border-[#4F886D]">
+    <div class="flex items-center">
+      <input id="mesgContent" type="text" class="flex-1 p-2 rounded-l-lg text-sm" placeholder="메시지를 입력하세요">
+      <!-- send버튼 -->
+      <button id="send-button" class="bg-[#4F886D] text-white p-2 rounded-r-lg text-sm">
+        <svg class="w-6 h-6 fill-[#ffffff]" viewBox="0 0 576 512" xmlns="http://www.w3.org/2000/svg">
+          <path d="M16.1 260.2c-22.6 12.9-20.5 47.3 3.6 57.3L160 376V479.3c0 18.1 14.6 32.7 32.7 32.7c9.7 0 18.9-4.3 25.1-11.8l62-74.3 123.9 51.6c18.9 7.9 40.8-4.5 43.9-24.7l64-416c1.9-12.1-3.4-24.3-13.5-31.2s-23.3-7.5-34-1.4l-448 256zm52.1 25.5L409.7 90.6 190.1 336l1.2 1L68.2 285.7zM403.3 425.4L236.7 355.9 450.8 116.6 403.3 425.4z"></path>
+        </svg>
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script src="/js/app.js"></script>
+</body>
+</html>

@@ -36,7 +36,22 @@
     		,publisher
     		,creator
     		,crt_tm
-    	from tb_gallery
+    	from 
+    	(
+	    	select 
+	    		gallery_num
+	  			,cat_num
+	  			,title
+	  			,author
+	    		,publisher
+	    		,creator
+	    		,crt_tm
+	    		,ceil(row_number() over(order by gallery_num desc)/10)-1 as pg
+	    	from tb_gallery
+        )
+    	where pg = #{pg}
+        order by
+            crt_tm desc
 	</select>
 
 	<select id="getItem" parameterType="GalleryDTO" resultType="GalleryDTO">
@@ -50,6 +65,10 @@
     		,crt_tm
     	from tb_gallery
     	where gallery_num = #{galleryNum}
+	</select>
+	
+	<select id="getGalleryCount" resultType="Integer">
+		select count(*) from tb_gallery
 	</select>
 	
 </mapper>

@@ -25,7 +25,7 @@ public class ReplyController {
     @GetMapping("/write")
     public String writeReply() {
         log.info("writeReply...");
-        return "/html/reply/reply_write";
+        return "/reply/reply_write";
     }
 
     @PostMapping(value = "/save")
@@ -33,12 +33,14 @@ public class ReplyController {
     public HashMap<String,Object> saveReply(@Valid @RequestBody ReplyDTO replyDTO){
 
         log.info("writeReply....");
-        replyDTO.setCreator(SessionConfig.getSessionDTO().getId());
 
         HashMap<String,Object> map = new HashMap<String,Object>();
-        replyService.createReply(replyDTO);
-
-        map.put("result", "success");
+        try {
+            replyService.createReply(replyDTO);
+            map.put("msg", "success");
+        } catch (SecurityException e) {
+            map.put("msg", e.getMessage());
+        }
         return map;
     }
 
@@ -48,38 +50,46 @@ public class ReplyController {
         model.addAttribute("replyList", replyList);
         return "/html/reply/reply_list";
     }
+//
+//    @GetMapping("/view/{rplNum}")
+//    public String getReplyOne(@PathVariable("rplNum") Integer rplNum, Model model) {
+//        ReplyDTO replyDTO = replyService.getReplyOne(rplNum);
+//        model.addAttribute("replyDetail", replyDTO);
+//        return "/html/reply/reply_detail";
+//    }
 
-    @GetMapping("/view/{rplNum}")
-    public String getReplyOne(@PathVariable("rplNum") Integer rplNum, Model model) {
-        ReplyDTO replyDTO = replyService.getReplyOne(rplNum);
-        model.addAttribute("replyDetail", replyDTO);
-        return "/html/reply/reply_detail";
-    }
-
-    @GetMapping("/edit/{rplNum}")
+    @GetMapping("/update/{rplNum}")
     public String updateReply(@PathVariable("rplNum") Integer rplNum, Model model) {
         ReplyDTO replyDTO = replyService.getReplyOne(rplNum);
         model.addAttribute("reply", replyDTO);
         return "/html/reply/reply_edit";
     }
 
-    @PutMapping("/modify/{rplNum}")
+    @PutMapping("/update/{rplNum}")
     @ResponseBody
     public HashMap<String,Object> updateReply(@PathVariable("rplNum")Integer rplNum, @RequestBody ReplyDTO replyDTO) {
-        replyDTO.setRplNum(rplNum);
-        replyService.updateReply(replyDTO);
 
         HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put("msg", "modify success");
+        try {
+            replyDTO.setRplNum(rplNum);
+            replyService.updateReply(replyDTO);
+            map.put("msg", "update success");
+        }catch (SecurityException e) {
+            map.put("msg", e.getMessage());
+        }
         return map;
     }
 
     @DeleteMapping("/delete/{rplNum}")
     @ResponseBody
     public HashMap<String, Object> deleteReply(@PathVariable("rplNum") Integer rplNum){
-        replyService.deleteReply(rplNum);
         HashMap<String, Object> map = new HashMap<String, Object>();
-        map.put("msg", "delete success");
+        try {
+            replyService.deleteReply(rplNum);
+            map.put("msg", "delete success");
+        } catch (SecurityException e) {
+            map.put("msg",e.getMessage());
+        }
         return map;
     }
 }

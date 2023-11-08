@@ -4,6 +4,52 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.readers.repository.GalleryDAO">
 
+	<insert id="saveGallery" parameterType="GalleryDTO">
+		insert into tb_gallery
+		(
+    		gallery_num
+    		,cat_num
+    		,title
+    		,author
+    		,publisher
+    		,creator
+		) values
+		(
+			TB_GALLERY_SEQ.nextval
+			,#{catNum}
+			,#{title}
+			,#{author}
+			,#{publisher}
+			,#{creator}
+		)
+		<selectKey keyProperty="galleryNum" resultType="Long" order="AFTER">
+    		SELECT TB_GALLERY_SEQ.currval FROM dual
+    	</selectKey>
+	</insert>
 	
+	<select id="getList" parameterType="GalleryDTO" resultType="GalleryDTO">
+		select
+			gallery_num
+    		,cat_num
+    		,title
+    		,author
+    		,publisher
+    		,creator
+    		,crt_tm
+    	from tb_gallery
+	</select>
 
+	<select id="getItem" parameterType="GalleryDTO" resultType="GalleryDTO">
+		select
+			gallery_num
+    		,cat_num
+    		,title
+    		,author
+    		,publisher
+    		,creator
+    		,crt_tm
+    	from tb_gallery
+    	where gallery_num = #{galleryNum}
+	</select>
+	
 </mapper>

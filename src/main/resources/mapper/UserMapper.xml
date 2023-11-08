@@ -1,9 +1,37 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper
-  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
-  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.project.readers.repository.UserDAO">
 
-	
+    <insert id="register" parameterType="UserDTO">
+        insert into tb_user(ID_NUM, ID, PW, NAME, EMAIL)
+        values (TB_USER_SEQ.NEXTVAL, #{id}, #{pw}, #{name}, #{email})
+    </insert>
 
+    <select id="login" parameterType="UserDTO" resultType="UserSessionDTO">
+        SELECT MEMBER.ID,
+               ROLE.role_num
+        FROM TB_USER MEMBER
+                 INNER JOIN
+             MP_USER_ROLE ROLE
+             ON
+                 MEMBER.ID = "ROLE".ID
+        WHERE MEMBER.id = #{id}
+          AND MEMBER.PW = #{pw}
+    </select>
+
+    <update id="update" parameterType="UserDTO">
+        update tb_user
+        set PW    = #{pw},
+            NAME  = #{name},
+            EMAIL = #{eamil}
+        where ID_NUM = #{idNum}
+    </update>
+
+    <delete id="delete" parameterType="Integer">
+        delete
+        from tb_user
+        where ID_NUM = #{idNum}
+    </delete>
 </mapper>

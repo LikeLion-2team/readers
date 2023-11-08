@@ -1,0 +1,64 @@
+{{>/layout/header}}
+<body>
+<form name="myform" id="myform">
+
+{{>/layout/nav}}
+
+    <div class="container" style="margin-top:80px">
+        <h2>게시판 목록</h2>
+
+        <table class="table table-hover ">
+			<colgroup>
+				<col width="8%"/>
+				<col width="*"/>
+				<col width="12%"/>
+				<col width="12%"/>
+				<col width="8%"/>
+			</colgroup>
+			
+            <thead class="table-secondary">
+              <tr>
+                <th>번호</th>
+                <th>제목</th>
+                <th>작성자</th>
+                <th>작성일</th>
+                <th>조회수</th>
+              </tr>
+            </thead>
+            <tbody>
+  				{{#boardList}}	  
+				<tr>
+					<td>{{boardNum}}</td>
+					<td><a href="/board/update/{{boardNum}}">{{title}}</a></td>
+					<td>{{creator}}</td>
+                    <td>{{crtTm}}</td>
+           			<td>{{hit}}</td>
+           		</tr>	
+           		{{/boardList}}
+           		
+            </tbody>
+          </table>
+
+ 
+          <ul class="pagination  justify-content-center">
+ 			{{{page}}}
+          </ul>
+       
+          <div class="container mt-3" style="text-align:right;">
+            <a href="/board/write" class="btn btn-secondary">글쓰기</a>
+          </div>
+          <br/><br/><br/>
+    </div>
+    </form>
+</body>
+
+<script>
+	function goPage(pg)
+	{
+		//document.getElementById("pg").value=pg;
+		frm = document.myform;
+		frm.method="get";
+		frm.action="/board/list/"+pg;
+		frm.submit();
+	}
+</script>

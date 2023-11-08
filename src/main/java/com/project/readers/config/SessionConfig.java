@@ -13,16 +13,16 @@ public class SessionConfig {
 	public static HttpSession getSession() {
 		HttpServletRequest httpServletRequest = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
 		HttpSession session = httpServletRequest.getSession();
+		IPconfig.getIp(session);
 		return session;
 	}
 
 	public static UserSessionDTO getSessionDTO() {
-//		HttpSession session = getSession();
+//HttpSession session = getSession();
 //		SessionDTO sessionDTO=(SessionDTO)session.getAttribute(ConstantConfig.USER_INFO);
-//		UserSessionDTO sessionDTO = new SessionDTO();
-//		sessionDTO.setId("admin");
-//		sessionDTO.setRoleNum(3);
-//		sessionDTO.setNickname("홍길동");
-		return null;
+		UserSessionDTO sessionDTO = new UserSessionDTO();
+		sessionDTO.setId("admin");
+		sessionDTO.setRoleNum(3);
+		return sessionDTO;
 	}
 }

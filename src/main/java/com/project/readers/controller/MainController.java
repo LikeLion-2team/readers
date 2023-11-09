@@ -22,7 +22,7 @@ public class MainController {
 	public String viewMain(Model model) {
 		Map<String, List<?>> mainList = mainService.viewMain();
 		model.addAttribute("mainList", mainList);
-		return "html/index";
+		return "./html/ui-card"; // mainpage
 	}
 	
 	@ResponseBody

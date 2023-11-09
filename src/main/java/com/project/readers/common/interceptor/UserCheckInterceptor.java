@@ -6,21 +6,37 @@ import org.springframework.web.servlet.ModelAndView;
 import com.project.readers.common.Constant;
 import com.project.readers.config.SessionConfig;
 import com.project.readers.config.UserRoleConfig.UserRole;
+import com.project.readers.entity.UserSessionDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class UserCheckInterceptor implements HandlerInterceptor {
+	@SuppressWarnings("unused")
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		Integer roleNum = SessionConfig.getSessionDTO().getRoleNum();
-		if (roleNum != UserRole.USER.getLevel())
+		Integer roleNum = handleSessionDTO();
+		
+		if (roleNum == null) {
+			response.sendRedirect("/");
 			return false;
-		else if (roleNum == UserRole.USER.getLevel())
+		} else if (roleNum == UserRole.USER.getLevel()) {
 			return true;
-		else
+		} else {
 			throw new IllegalArgumentException(Constant.UNKNOWN_ACCESS);
+		}
+
+	}
+
+	private Integer handleSessionDTO() {
+		Integer roleNum = 0;
+		UserSessionDTO userSessionDTO = SessionConfig.getSessionDTO();
+		if (userSessionDTO == null)
+			roleNum = null;
+		else
+			roleNum = userSessionDTO.getRoleNum();
+		return roleNum;
 	}
 
 	@Override

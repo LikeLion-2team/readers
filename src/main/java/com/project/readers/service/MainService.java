@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -60,8 +61,8 @@ public class MainService {
 	// 방문자 확인
 	private void checkVisistCount() {
 		String guestIp = IPconfig.getIp(SessionConfig.getSession());
-		String newUser = mainDAO.checkGuest(guestIp); // 첫 방문자인지 아니면 처음 방문자가 아닌지 확인
-		if (!guestIp.equals(newUser))
+		Integer newUser = mainDAO.checkGuest(guestIp); // 첫 방문자인지 아니면 처음 방문자가 아닌지 확인
+		if (newUser != Constant.MIN_VISITOR)
 			mainDAO.insertVisitor(guestIp); // 방문자 추가
 		else
 			updateGuest(guestIp);
@@ -100,7 +101,6 @@ public class MainService {
 		return false;
 	}
 
-	
 	public LocalDateTime converterToTime(DATE date) {
 		if (date == null) {
 			date = new DATE(new Timestamp(System.currentTimeMillis()));
@@ -145,29 +145,29 @@ public class MainService {
 	// 7일간 방문자 수 가져오기
 	public Map<String, List<VisitorCountDTO>> weekVisiteCount() {
 		Map<String, List<VisitorCountDTO>> resultMap = new HashMap<>();
-		Map<String, String> insertValue = inserWeekVisiteValue();
-		List<VisitorCountDTO> totalVisitor = mainDAO.getWeekVisiteCount(insertValue);
+		Date sixDayAgoDay = inserWeekVisiteValue();
+		List<VisitorCountDTO> totalVisitor = mainDAO.getWeekVisiteCount(sixDayAgoDay);
+		System.err.println("totalVisitor::" + totalVisitor);
 		resultMap = handleWeekVisisteCount(totalVisitor);
 		return resultMap;
 	}
 
 	// 급하면 쓰는구나;;
-	private Map<String, String> inserWeekVisiteValue() {
-		Map<String, String> insertMap = new HashMap<>();
-		LocalDateTime nowTime = LocalDateTime.now();
+	private Date inserWeekVisiteValue() {
 		LocalDateTime sixDaysAgo = LocalDateTime.now().minusDays(6);
-		String nowDay = dateFormat(nowTime);
-		String sixDayAgoDay = dateFormat(sixDaysAgo);
-		insertMap.put("today", nowDay);
-		insertMap.put("sixDayAgoDay", sixDayAgoDay);
-		return insertMap;
+		System.err.println("sixDaysAgo ::" + sixDaysAgo);
+		Date sixDayAgoDay = dateFormat(sixDaysAgo);
+		return sixDayAgoDay;
 	}
 
 	// DATE 형식 변환 mapper 에러 주의
-	private String dateFormat(LocalDateTime Time) {
+	private Date dateFormat(LocalDateTime Time) {
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 		String dateForm = Time.format(formatter);
-		return dateForm;
+		LocalDate localDate = LocalDate.parse(dateForm, formatter);
+		Date inputValue = Date.valueOf(localDate);
+		System.err.println("dateFormat::"+inputValue);
+		return inputValue;
 	}
 
 	// 방문자 수 DB결과 값 따른 리턴

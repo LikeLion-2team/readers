@@ -6,6 +6,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.project.readers.common.Constant;
 import com.project.readers.config.SessionConfig;
 import com.project.readers.config.UserRoleConfig.UserRole;
+import com.project.readers.entity.UserSessionDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -14,7 +15,7 @@ public class AdminCheckInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		Integer roleNum = SessionConfig.getSessionDTO().getRoleNum();
+		Integer roleNum = handleSessionDTO();
 		if (roleNum != UserRole.ADMIN.getLevel())
 			return false;
 		else if (roleNum == UserRole.ADMIN.getLevel())
@@ -22,6 +23,16 @@ public class AdminCheckInterceptor implements HandlerInterceptor {
 		else
 			throw new IllegalArgumentException(Constant.UNKNOWN_ACCESS);
 
+	}
+
+	private Integer handleSessionDTO() {
+		Integer roleNum = 0;
+		UserSessionDTO userSessionDTO = SessionConfig.getSessionDTO();
+		if (userSessionDTO == null)
+			roleNum = null;
+		else
+			roleNum = userSessionDTO.getRoleNum();
+		return roleNum;
 	}
 
 	@Override

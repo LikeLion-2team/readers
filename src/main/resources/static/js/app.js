@@ -1,5 +1,6 @@
 var stompClient = null;
 let id = document.getElementById("roomid").value;
+console.log(id)
 var chatRoomId = 1;
 
 function setConnected(connected) {
@@ -21,6 +22,7 @@ function connect() {
         console.log('Connected: ' + frame);
         //sendto 경로와 일치
         stompClient.subscribe('/topic/chatroom/'+chatRoomId, function (chatMesgDTO) {
+            console.log( chatMesgDTO);
             showGreeting(JSON.parse(chatMesgDTO.body));
         });
     });
@@ -33,11 +35,11 @@ function disconnect() {
     setConnected(false);
     console.log("Disconnected");
 
-    window.location.href = '/chat';
+    window.location.href = '/';
 }
 
 function send() {
-    // @MessageMapping() 경로
+    // @MessageMapping() 경로임
     stompClient.send("/app/mesg/"+ chatRoomId, {}, JSON.stringify({
         'mesgContent': $("#mesgContent").val(),
         'id': id,
@@ -45,10 +47,11 @@ function send() {
     }));
 }
 
+
 function showGreeting(chatMesgDTO) {
     var messageContainer = document.getElementById("message-container");
     var messageElement = document.createElement("div");
-    console.log(id);
+
     messageElement.textContent = "[" + chatMesgDTO.id + "] " + chatMesgDTO.mesgContent;
 
     if(chatMesgDTO.id==id){
@@ -56,8 +59,8 @@ function showGreeting(chatMesgDTO) {
         messageElement.innerHTML = `
         <div class="flex mb-2 min-w-[97%] relative" style="justify-content: flex-end;">
             <div class="bg-[#4F886D] p-2 rounded-lg max-w-[80%] relative" style="text-align: right;">
-                <p class="text-gray-500 font-semibold mb-1" style="text-align: right;">${id}:</p>
-                <p>${chatMesgDTO.mesgContent }</p>
+                <p class="text-gray-100 mb-1" style="text-align: right;">${id}:</p>
+                <p class="text-white-50 font-semibold mb-1">${chatMesgDTO.mesgContent }</p>
             </div>
         </div>`;
     } else {
@@ -65,8 +68,8 @@ function showGreeting(chatMesgDTO) {
         messageElement.innerHTML = `
         <div class="flex mb-2 w-full relative">
             <div class="bg-[#F6F6F6] p-2 rounded-lg ml-7 max-w-[80%] relative" style="text-align: left;">
-                <p class="text-gray-500 font-semibold mb-1">${id}:</p>
-                <p>${chatMesgDTO.mesgContent }</p>
+                <p class="text-gray-100 mb-1">${id}:</p>
+                <p class="text-white-50 font-semibold mb-1">${chatMesgDTO.mesgContent }</p>
             </div>
         </div>`;
     }
@@ -80,3 +83,4 @@ $(document).ready(function () {
     $("#disconnect").click(function() { disconnect(); });
     $("#send-button").click(function() { send(); });
 });
+

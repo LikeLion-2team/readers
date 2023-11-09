@@ -1,7 +1,6 @@
 package com.project.readers.controller;
 
 import com.project.readers.common.Pager;
-import com.project.readers.config.SessionConfig;
 import com.project.readers.entity.BoardDTO;
 import com.project.readers.service.BoardService;
 import jakarta.validation.Valid;
@@ -25,7 +24,7 @@ public class BoardController {
     @GetMapping("/write")
     public String writeBoard() {
         log.info("writeGet....");
-        return "/html/board/board_write";
+        return "/board/board_write";
     }
 
 
@@ -34,13 +33,16 @@ public class BoardController {
     public HashMap<String,Object> saveBoard(@Valid @RequestBody BoardDTO boardDTO) {
 
         log.info("writePost....");
-        boardDTO.setCreator(SessionConfig.getSessionDTO().getId());
 
         HashMap<String,Object> map = new HashMap<String,Object>();
-        boardService.createBoard(boardDTO);
-
-        map.put("msg","save success");
+        try {
+            boardService.createBoard(boardDTO);
+            map.put("msg","save success");
+        } catch (SecurityException e) {
+            map.put("msg", e.getMessage());
+        }
         return map;
+
     }
 
     @GetMapping("/list/{pg}")
@@ -50,40 +52,42 @@ public class BoardController {
         List<BoardDTO> boardList = boardService.getBoardList(boardDTO);
         model.addAttribute("boardList", boardList);
         model.addAttribute("page", page);
-        return "/html/board/board_list";
+        return "/board/board_list";
     }
 
-    @GetMapping("/view/{boardNum}")
-    public String boardDetail(@PathVariable("boardNum") Integer boardNum, Model model) {
-        BoardDTO boardDTO = boardService.getBoardOne(boardNum);
-        model.addAttribute("boardDetail", boardDTO);
-        return "/html/board/board_detail";
-    }
-
-    @GetMapping("/edit/{boardNum}")
+    @GetMapping("/update/{boardNum}")
     public String updateBoard(@PathVariable("boardNum") Integer boardNum, Model model) {
         BoardDTO boardDTO = boardService.getBoardOne(boardNum);
         model.addAttribute("board", boardDTO);
-        return "/html/board/board_edit";
+        return "/board/board_update";
     }
 
-    @PutMapping("/modify/{boardNum}")
+    @PutMapping("/update/{boardNum}")
     @ResponseBody
     public HashMap<String,Object> updateBoard(@PathVariable("boardNum") Integer boardNum, @RequestBody BoardDTO boardDTO) {
-        boardDTO.setBoardNum(boardNum);
-        boardService.updateBoard(boardDTO);
-
         HashMap<String,Object> map = new HashMap<String,Object>();
-        map.put("msg", "modify success");
+
+        try {
+            boardDTO.setBoardNum(boardNum);
+            boardService.updateBoard(boardDTO);
+            map.put("msg", "update success");
+        } catch (SecurityException e) {
+            map.put("msg", e.getMessage());
+        }
+
         return map;
     }
 
     @DeleteMapping("/delete/{boardNum}")
     @ResponseBody
     public HashMap<String,Object> deleteBoard(@PathVariable("boardNum") Integer boardNum) {
-        boardService.deleteBoard(boardNum);
         HashMap<String, Object> map = new HashMap<String,Object>();
-        map.put("msg", "delete success");
+        try {
+            boardService.deleteBoard(boardNum);
+            map.put("msg", "delete success");
+        } catch (SecurityException e) {
+            map.put("msg", e.getMessage());
+        }
         return map;
     }
 }

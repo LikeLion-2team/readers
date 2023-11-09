@@ -1,0 +1,42 @@
+{{>/layout/header}}
+<body>
+<form name="myform" id="myform">
+
+    {{>/layout/nav}}
+
+    <div>
+        <div class="row mt-3">
+            <div class="col">
+                <div class="card">
+                    <div class="card-header">
+                        Board Register
+                    </div>
+                    <div class="card-body">
+                        <form action="/board/write" method="post">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Title</span>
+                                <input type="text" name="title" class="form-control" id="title" placeholder="Enter Title">
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text">Content</span>
+                                <textarea class="form-control col-sm-5" rows="5" name="content" id="content"></textarea>
+                            </div>
+
+                            <div class="my-4">
+                                <div class="float-end">
+                                    <button type="button" class="btn btn-primary" id="btn-save">등록</button>
+                                    <a href="/board/list/0" class="btn btn-secondary">취소</a>
+                                </div>
+                            </div>
+                        </form>
+                    </div><!--end card body-->
+
+                </div><!--end card-->
+            </div><!-- end col-->
+        </div><!-- end row-->
+    </div>
+</form>
+</body>
+
+<script src="/js/board.js"></script>

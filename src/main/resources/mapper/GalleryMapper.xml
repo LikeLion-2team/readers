@@ -46,7 +46,7 @@
 	    		,publisher
 	    		,creator
 	    		,crt_tm
-	    		,ceil(row_number() over(order by gallery_num desc)/10)-1 as pg
+	    		,ceil(row_number() over(order by gallery_num desc)/8)-1 as pg
 	    	from tb_gallery
         )
     	where pg = #{pg}

@@ -1,5 +1,6 @@
 package com.project.readers.repository;
 
+import java.sql.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -17,7 +18,7 @@ public interface MainDAO {
 
 	List<GalleryDTO> getHotGallery(Integer mainViewImg); //5개
 
-	String checkGuest(String guestIp);
+	Integer checkGuest(String guestIp);
 	
 	void insertVisitor(String guestIp);
 
@@ -29,7 +30,8 @@ public interface MainDAO {
 
 	Integer getDayVisiteCount();
 
-	List<VisitorCountDTO> getWeekVisiteCount(Map<String, String> insertValue);
+	List<VisitorCountDTO> getWeekVisiteCount(Date sixDayAgoDay);
+
 
 
 }

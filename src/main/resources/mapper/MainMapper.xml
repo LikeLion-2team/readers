@@ -43,23 +43,25 @@
 			ROWS ONLY
 	</select>
 
-	<select id="checkGuest" parameterType="String" resultType="String">
+	
+	<select id="checkGuest" parameterType="String" resultType="Integer">
 		SELECT
-			VISITOR.IP
+				COUNT(*)
 		FROM
-			TB_VISITOR VISITOR
+
+				TB_VISITOR VISITOR
 		WHERE
-			VISITOR.IP = #{guestIp}
+				VISITOR.IP = #{guestIp}
 	</select>
 
 	<select id="getLastVisitTime" parameterType="String" resultType="VisitorDTO">
 		SELECT
-			VISITOR.IP
-			 ,VISITOR.VISITE_TM
+				VISITOR.IP
+				,VISITOR.VISITE_TM
 		FROM
-			TB_VISITOR VISITOR
+				TB_VISITOR VISITOR
 		WHERE
-			VISITOR.IP = #{guestIp}
+				VISITOR.IP = #{guestIp}
 	</select>
 
 
@@ -79,14 +81,25 @@
 			)
 	</insert>
 
-	<update id="countPlusVisist" parameterType="String">
-		UPDATE
+	
+	<insert id="countPlusVisist" parameterType="String">
+	INSERT	INTO
+
 			TB_VISITOR
-		SET
-			HIT = HIT + 1
-		WHERE
-			IP = #{guestIp}
-	</update>
+
+			(
+			VISITOR_NUM
+			,IP
+			,VISITE_TM
+			)
+	VALUES
+			(
+			TB_VISITOR_SEQ.NEXTVAL
+			,#{guestIp}
+			,SYSDATE
+			)
+	</insert>
+	
 
 	<select id="getTotalVisiteCount" resultType="Integer">
 		SELECT
@@ -104,21 +117,25 @@
 			TO_DATE(VISITE_TM,'YYYY-MM-DD') = TO_DATE(#{nowTime},'YYYY-MM-DD')
 	</select>
 
-	<select id="getWeekVisiteCount"  parameterType="Map" resultType="VisitorCountDTO">
+	
+	<select id="getWeekVisiteCount"  parameterType="Date" resultType="VisitorCountDTO">
 		SELECT
-			TO_DATE(VISITE_TM, 'YYYY-MM-DD')AS DAY
-			 ,COUNT(VISITOR_NUM) AS VISITORCOUNT
+				TO_DATE(VISITE_TM, 'YYYY-MM-DD') AS DAY
+				,COUNT(*) AS VISITOR_COUNT
 		FROM
-			TB_VISITOR
+
+				TB_VISITOR
+
 		WHERE
-			TO_DATE(VISITE_TM, 'YYYY-MM-DD')
-				BETWEEN
-				TO_DATE(#{today}, 'YYYY-MM-DD')
-				AND
-				TO_DATE(#{sixDayAgoDay}, 'YYYY-MM-DD')
+				TO_DATE(VISITE_TM, 'YYYY-MM-DD') 
+		BETWEEN 
+				TO_DATE(SYSDATE-6,'YYYY-MM-DD') 
+		AND 
+				TO_DATE(SYSDATE, 'YYYY-MM-DD')
 		GROUP BY
-			TO_DATE(VISITE_TM, 'YYYY-MM-DD')
+
+				TO_DATE(VISITE_TM, 'YYYY-MM-DD')
 		ORDER BY
-			TO_DATE(VISITE_TM, 'YYYY-MM-DD')
+				TO_DATE(VISITE_TM, 'YYYY-MM-DD')
 	</select>
 </mapper>

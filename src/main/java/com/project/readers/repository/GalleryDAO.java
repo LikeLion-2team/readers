@@ -8,7 +8,10 @@ import com.project.readers.entity.GalleryDTO;
 
 @Mapper
 public interface GalleryDAO {
-	List<GalleryDTO> getList();
+	List<GalleryDTO> getList(GalleryDTO galleryDTO);
+	List<GalleryDTO> searchByTitle(GalleryDTO galleryDTO);
+	List<GalleryDTO> searchByAuthor(GalleryDTO galleryDTO);
 	GalleryDTO getItem(GalleryDTO galleryDTO);
 	void saveGallery(GalleryDTO galleryDTO);
+	Integer getGalleryCount();
 }

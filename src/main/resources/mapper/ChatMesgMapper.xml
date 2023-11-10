@@ -5,8 +5,23 @@
 <mapper namespace="com.project.readers.repository.ChatMesgDAO">
 
     <insert id="insertChatMesg" parameterType="ChatMesgDTO">
-        INSERT INTO TB_CHATMESG (MESG_ID, CHAT_ROOM_ID, MESG_CONTENT, SEND_TM, ID)
-        VALUES (TB_CHATMESG_SEQ.NEXTVAL, #{chatRoomId}, #{mesgContent}, SYSDATE, #{id})
+        INSERT INTO
+		        TB_CHATMESG
+		        (
+		        MESG_ID
+		        ,CHAT_ROOM_ID
+		        ,MESG_CONTENT
+		        ,ID
+		        ,SEND_TM
+		        )
+        VALUES
+		        (
+		        TB_CHATMESG_SEQ.NEXTVAL
+		        ,#{chatRoomId}
+		        ,#{mesgContent}
+		        ,#{id}
+		        SYSDATE
+		        )
     </insert>
 
 </mapper>

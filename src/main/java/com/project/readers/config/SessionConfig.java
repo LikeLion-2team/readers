@@ -21,6 +21,9 @@ public class SessionConfig {
 	public static UserSessionDTO getSessionDTO() {
 		HttpSession session = getSession();
 		UserSessionDTO usersessionDTO = (UserSessionDTO)session.getAttribute(Constant.USER_INFO);
+//		UserSessionDTO userSessionDTO = new UserSessionDTO();
+//		userSessionDTO.setId("admin");
+//		userSessionDTO.setRoleNum(3);
 		return usersessionDTO;
 	}
 }

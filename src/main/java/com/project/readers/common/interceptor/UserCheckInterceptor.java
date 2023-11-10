@@ -17,11 +17,10 @@ public class UserCheckInterceptor implements HandlerInterceptor {
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
 		Integer roleNum = handleSessionDTO();
-		
 		if (roleNum == null) {
 			response.sendRedirect("/");
 			return false;
-		} else if (roleNum == UserRole.USER.getLevel()) {
+		} else if (roleNum >= UserRole.USER.getLevel()) {
 			return true;
 		} else {
 			throw new IllegalArgumentException(Constant.UNKNOWN_ACCESS);
@@ -32,6 +31,7 @@ public class UserCheckInterceptor implements HandlerInterceptor {
 	private Integer handleSessionDTO() {
 		Integer roleNum = 0;
 		UserSessionDTO userSessionDTO = SessionConfig.getSessionDTO();
+		System.err.println("userCheck::"+ userSessionDTO);
 		if (userSessionDTO == null)
 			roleNum = null;
 		else

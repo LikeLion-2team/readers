@@ -31,7 +31,6 @@ public class UserCheckInterceptor implements HandlerInterceptor {
 	private Integer handleSessionDTO() {
 		Integer roleNum = 0;
 		UserSessionDTO userSessionDTO = SessionConfig.getSessionDTO();
-		System.err.println("userCheck::"+ userSessionDTO);
 		if (userSessionDTO == null)
 			roleNum = null;
 		else

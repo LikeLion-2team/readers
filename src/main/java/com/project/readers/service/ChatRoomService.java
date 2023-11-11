@@ -13,7 +13,6 @@ public class ChatRoomService {
 
     public String enterChatRoom() {
         String id = accessId();
-        System.err.println("ChatRoomDAO ::" + id);
         if (id != null) {
         	return "chat"; // 채팅방 페이지 (chat.html)
         	//login 잘이동 그러면 html로 가봐야함

@@ -3,17 +3,13 @@ package com.project.readers.service;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,13 +22,17 @@ import com.project.readers.entity.VisitorCountDTO;
 import com.project.readers.entity.VisitorDTO;
 import com.project.readers.repository.MainDAO;
 
+import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import oracle.sql.DATE;
 
 @Service
 @Transactional
+@RequiredArgsConstructor
+@Log4j2
 public class MainService {
-	@Autowired
-	private MainDAO mainDAO;
+
+	private final MainDAO mainDAO;
 
 	// 메인 화면
 	public Map<String, List<?>> viewMain() {
@@ -65,6 +65,7 @@ public class MainService {
 			resultMap.put("galleryList", getGallery);
 			resultMap.put("boardList", getBoard);
 		} else {
+			log.error("handleViewMain에서 알 수 없는 값 발견 getGallery::" + getGallery + ", getBoard::" + getBoard);
 			resultMap.put(resultMesg, Collections.emptyList());
 		}
 		return resultMap;
@@ -86,15 +87,14 @@ public class MainService {
 
 	// 전체 방문자와 하루 방문자 값 확인해서 보내주기.
 	private Integer checkValueVisitor(Integer visitor) {
-		//0일 때
+		// 0일 때
 		if (visitor == Constant.MIN_VISITOR)
 			visitor = 1;
 		else if (visitor > Constant.MIN_VISITOR)
 			return visitor;
 		else
-			// 여기다가 로그도 남기는 것이 더 좋습니다.
-			throw new IllegalArgumentException(Constant.UNKNOWN_VALUE);
-		return null;
+			log.error("checkValueVisitor 알수 없는 값 발견 visitor:: " + visitor);
+		throw new IllegalArgumentException(Constant.UNKNOWN_VALUE);
 
 	}
 
@@ -107,37 +107,32 @@ public class MainService {
 
 	// 7일간 각 일일 방문자 수 DB값 체크
 	private List<VisitorCountDTO> checkValueVisitorTypeList(List<VisitorCountDTO> totalVisitor) {
-		//사이즈가 0 이거나 null일 때
+		// 사이즈가 0 이거나 null일 때
 		if (totalVisitor.size() == Constant.MIN_VISITOR || totalVisitor == null)
 			totalVisitor = Collections.emptyList();
 		else if (totalVisitor.size() > Constant.MIN_VISITOR)
 			return totalVisitor;
 		else
-			//여기다가 로그도 남기는 편이 좋습니다.
-			throw new IllegalArgumentException(Constant.UNKNOWN_VALUE);
-		return null;
-
+			log.error("checkValueVisitorTypeList 알수 없는 값 발견 totalVisitor:: " + totalVisitor);
+		throw new IllegalArgumentException(Constant.UNKNOWN_VALUE);
 	}
 
-	//방문자 권한 체크 부분 입니다.
-
-	// 방문자 확인
+	// 방문자 권한 체크 부분 입니다.
+	// 방문자 확인 기능입니다.
 	private void checkVisistCount() {
 		String guestIp = IPconfig.getIp(SessionConfig.getSession());
 		Integer newUser = mainDAO.checkGuest(guestIp); // 첫 방문자인지 아니면 처음 방문자가 아닌지 확인
-		if (newUser != Constant.MIN_VISITOR)
-			mainDAO.insertVisitor(guestIp); // 0이 아닐 때 방문자 추가
+		if (newUser == Constant.MIN_VISITOR) // 첫 방문자 0 재방문자 1이상 0일때 인서트합니다.
+			mainDAO.insertVisitor(guestIp);
 		else
 			updateGuest(guestIp);
-//		else
-//			throw new IllegalArgumentException(Constant.UNKNOWN_ACCESS);
 	}
 
-	// 재방문자 업데이트 하루에 한번만 하도록
+	// 재방문자 업데이트 하루에 한번만 하도록 제한하는 기능입니다.
 	private void updateGuest(String guestIp) {
 		VisitorDTO lastVisiteDTO = mainDAO.getLastVisitTime(guestIp);
 		VisitorDTO visitor = handleVsitor(guestIp);
-		boolean checkUpdate = compareUpdateGuest(lastVisiteDTO, visitor);
+		boolean checkUpdate = compareUpdateGuest(lastVisiteDTO, visitor); //언제 재방문했는지 확인하는 메서드입니다.
 		if (checkUpdate) {
 			mainDAO.countPlusVisist(guestIp);
 		}
@@ -153,19 +148,19 @@ public class MainService {
 		return visitor;
 	}
 
-	// Oralce: DATE 포맷 = HH.MI.SSXFF AM 타임 포맷 오류 날시 DTO에서 변경
+	// Oralce: DATE 포맷 = HH.MI.SSXFF AM 타임 포맷 오류 날시 DTO에서 변경하는 편이 좋습니다.
+	// 지금 방문한 날과 최근 방문한 날과 비교하는 메서드 입니다.
 	private boolean compareUpdateGuest(VisitorDTO lastVisiteDTO, VisitorDTO visitor) {
 		LocalDateTime date = converterToTime(lastVisiteDTO.getVisiteTm());
 		LocalDateTime compareDate = converterToTime(visitor.getVisiteTm());
-		System.err.println(date);
-		System.err.println(compareDate);
-		Duration duration = Duration.between(date, compareDate);
-		if (duration.toDays() <= 1)
+		Duration duration = Duration.between(date, compareDate); // duration:: 1보다 같거나 커야 증가합니다.
+		if (duration.toDays() >= 1)
 			return true;
 
 		return false;
 	}
 
+	// ORACLE DATE 타입을 java date 타입으로 변환해주는 기능입니다.
 	public LocalDateTime converterToTime(DATE date) {
 		if (date == null) {
 			date = new DATE(new Timestamp(System.currentTimeMillis()));
@@ -178,6 +173,5 @@ public class MainService {
 		}
 		return localDateTime;
 	}
-
 
 }

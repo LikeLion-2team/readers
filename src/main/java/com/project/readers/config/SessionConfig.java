@@ -4,6 +4,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.project.readers.common.Constant;
+import com.project.readers.config.UserRoleConfig.UserRole;
 import com.project.readers.entity.UserSessionDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,7 +24,7 @@ public class SessionConfig {
 //		UserSessionDTO userSessionDTO = (UserSessionDTO)session.getAttribute(Constant.USER_INFO);
 		UserSessionDTO userSessionDTO = new UserSessionDTO();
 		userSessionDTO.setId("1234");
-		userSessionDTO.setRoleNum(2);
+		userSessionDTO.setRoleNum(UserRole.ADMIN.getLevel());
 		return userSessionDTO;
 	}
 }

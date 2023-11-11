@@ -65,7 +65,9 @@ function checkValidation() {
 	}
 
 	let selectedFile = $("#bookCoverImg")[0].files[0];
+	let infoMsg = '<span style="color: red;">파일을 첨부해주세요.</span>';
 	if (selectedFile == null) {
+		$("#bookCoverImg").parent().siblings('label').after(infoMsg);
 		alert('이미지를 첨부해주세요.');
 		$("#bookCoverImg").focus();
 		return false;

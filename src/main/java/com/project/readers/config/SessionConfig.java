@@ -21,10 +21,10 @@ public class SessionConfig {
 
 	public static UserSessionDTO getSessionDTO() {
 		HttpSession session = getSession();
-//		UserSessionDTO userSessionDTO = (UserSessionDTO)session.getAttribute(Constant.USER_INFO);
-		UserSessionDTO userSessionDTO = new UserSessionDTO();
-		userSessionDTO.setId("1234");
-		userSessionDTO.setRoleNum(UserRole.ADMIN.getLevel());
+		UserSessionDTO userSessionDTO = (UserSessionDTO)session.getAttribute(Constant.USER_INFO);
+//		UserSessionDTO userSessionDTO = new UserSessionDTO();
+//		userSessionDTO.setId("1234");
+//		userSessionDTO.setRoleNum(UserRole.ADMIN.getLevel());
 		return userSessionDTO;
 	}
 }

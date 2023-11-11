@@ -2,6 +2,11 @@ $(() => {
 	$("#btnCancel").click(() => {
 		location.href = "/gallery/list/0";
 	});
+	
+	$("#bookCoverImg").change(() => {
+		let infoMsgTag = $("#bookCoverImg").parent().siblings('label').siblings('span');
+		if (infoMsgTag) infoMsgTag.remove();		
+	});
 
 	$("#btnGalleryRegister").click(() => {
 		//사용자 입력 데이터 검증
@@ -72,7 +77,7 @@ function checkValidation() {
 		$("#bookCoverImg").focus();
 		return false;
 	}
-
+	
 	selectedFile = $("#bookCoverImg")[0].files[0];
 	let fileName = selectedFile.name;
 	let allowedExtensions = ['.jpg', '.jpeg', '.png'];

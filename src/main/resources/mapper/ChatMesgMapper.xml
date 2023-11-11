@@ -20,7 +20,7 @@
 		        ,#{chatRoomId}
 		        ,#{mesgContent}
 		        ,#{id}
-		        SYSDATE
+		        ,SYSDATE
 		        )
     </insert>
 

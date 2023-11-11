@@ -6,44 +6,46 @@
 
 	<select id="getHotBoard" resultType="BoardDTO" parameterType="Integer">
 		SELECT
-			BOARD.BOARD_NUM
-			 ,BOARD.CAT_NUM
-			 ,BOARD.CREATOR
-			 ,BOARD.TITLE
-			 ,BOARD.CONTENT
-			 ,BOARD.HIT
-			 ,BOARD.CRT_TM
+				BOARD.BOARD_NUM
+				 ,BOARD.CAT_NUM
+				 ,BOARD.CREATOR
+				 ,BOARD.TITLE
+				 ,BOARD.CONTENT
+				 ,BOARD.HIT
+				 ,BOARD.CRT_TM
 		FROM
-			TB_BOARD BOARD
+				TB_BOARD BOARD
 		ORDER BY
-			CRT_TM DESC
-			FETCH FIRST #{mainViewImg}
-			ROWS ONLY
+				CRT_TM DESC
+		FETCH FIRST
+				#{mainViewImg}
+		ROWS ONLY
 	</select>
 
 	<select id="getHotGallery" resultType="GalleryDTO" parameterType="Integer">
 		SELECT
-			GALLERY.GALLERY_NUM
-			 ,GALLERY.CAT_NUM
-			 ,GALLERY.TITLE
-			 ,GALLERY.AUTHOR
-			 ,GALLERY.PUBLISHER
-			 ,GALLERY.CREATOR
-			 ,GALLERY.CRT_TM
-			 ,POINT.GOOD_CNT
+				 GALLERY.GALLERY_NUM
+				 ,GALLERY.CAT_NUM
+				 ,GALLERY.TITLE
+				 ,GALLERY.AUTHOR
+				 ,GALLERY.PUBLISHER
+				 ,GALLERY.CREATOR
+				 ,GALLERY.CRT_TM
+				 ,POINT.GOOD_CNT
 		FROM
-			TB_GALLERY GALLERY
-				LEFT OUTER JOIN
-			TB_POINT POINT
-			ON
+				TB_GALLERY GALLERY
+		LEFT OUTER JOIN
+				TB_POINT POINT
+		ON
 				GALLERY.GALLERY_NUM=POINT.GALLERY_NUM
 		ORDER BY
-			CRT_TM DESC
-			FETCH FIRST #{mainViewImg}
-			ROWS ONLY
+				CRT_TM DESC
+		FETCH FIRST
+				#{mainViewImg}
+		ROWS ONLY
 	</select>
 
-	
+
 	<select id="checkGuest" parameterType="String" resultType="Integer">
 		SELECT
 				COUNT(*)
@@ -67,70 +69,67 @@
 
 	<insert id="insertVisitor" parameterType="String" >
 		INSERT INTO
-			TB_VISITOR
-		(
-			VISITOR_NUM
-		,IP
-		,VISITE_TM
-		)
+				TB_VISITOR
+				(
+				VISITOR_NUM
+				,IP
+				,VISITE_TM
+				)
 		VALUES
-			(
+				(
 				TB_VISITOR_SEQ.NEXTVAL
-			,#{guestIp}
-			,SYSDATE
-			)
+				,#{guestIp}
+				,SYSDATE
+				)
 	</insert>
 
-	
+
 	<insert id="countPlusVisist" parameterType="String">
 	INSERT	INTO
-
-			TB_VISITOR
-
-			(
-			VISITOR_NUM
-			,IP
-			,VISITE_TM
-			)
+				TB_VISITOR
+				(
+				VISITOR_NUM
+				,IP
+				,VISITE_TM
+				)
 	VALUES
-			(
-			TB_VISITOR_SEQ.NEXTVAL
-			,#{guestIp}
-			,SYSDATE
-			)
+				(
+				TB_VISITOR_SEQ.NEXTVAL
+				,#{guestIp}
+				,SYSDATE
+				)
 	</insert>
-	
+
 
 	<select id="getTotalVisiteCount" resultType="Integer">
 		SELECT
-			COUNT(VISITOR_NUM)
+				COUNT(VISITOR_NUM)
 		FROM
-			TB_VISITOR VISITOR
+				TB_VISITOR VISITOR
 	</select>
 
-	<select id="getDayVisiteCount" parameterType="String" resultType="Integer" >
+	<select id="getDayVisiteCount" resultType="Integer" >
 		SELECT
-			COUNT(VISITOR_NUM)
+				COUNT(VISITOR_NUM)
 		FROM
-			TB_VISITOR VISITOR
+				TB_VISITOR VISITOR
 		WHERE
-			TO_DATE(VISITE_TM,'YYYY-MM-DD') = TO_DATE(#{nowTime},'YYYY-MM-DD')
+				TO_DATE(VISITE_TM,'YYYY-MM-DD') = TO_DATE(CURRENT_DATE, 'YYYY-MM-DD')
 	</select>
 
-	
-	<select id="getWeekVisiteCount"  parameterType="Date" resultType="VisitorCountDTO">
+
+	<select id="getWeekVisiteCount"  resultType="VisitorCountDTO">
 		SELECT
 				TO_DATE(VISITE_TM, 'YYYY-MM-DD') AS DAY
 				,COUNT(*) AS VISITOR_COUNT
 		FROM
-
 				TB_VISITOR
 
 		WHERE
-				TO_DATE(VISITE_TM, 'YYYY-MM-DD') 
-		BETWEEN 
-				TO_DATE(SYSDATE-6,'YYYY-MM-DD') 
-		AND 
+				TO_DATE(VISITE_TM, 'YYYY-MM-DD')
+		BETWEEN
+				TO_DATE(SYSDATE-6,'YYYY-MM-DD')
+		AND
 				TO_DATE(SYSDATE, 'YYYY-MM-DD')
 		GROUP BY
 

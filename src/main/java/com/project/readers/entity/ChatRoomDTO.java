@@ -14,7 +14,7 @@ public class ChatRoomDTO {
     // 카테고리 도메인
     private String catDomain;
 
-    // 아이디
+    // 관리자 아이디
     private String id;
 
     // 채팅 방 이름

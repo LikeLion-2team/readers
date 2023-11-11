@@ -1,285 +1,279 @@
 <!doctype html>
 <html lang="en">
+
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Modernize Free</title>
-  <link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
-  <link rel="stylesheet" href="../assets/css/styles.min.css" />
-  <link rel="stylesheet" href="path-to-bootstrap.css">
-  <link rel="stylesheet" href="path-to-custom.css">
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Modernize Free</title>
+	<link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
+	<link rel="stylesheet" href="../assets/css/styles.min.css" />
+	<link rel="stylesheet" href="path-to-bootstrap.css">
+	<link rel="stylesheet" href="path-to-custom.css">
 
-  <style>
-    .slider-container {
-      overflow: hidden;
-      width: 800px;
-      margin: auto;
-    }
+	<style>
+		.slider-container {
+			overflow: hidden;
+			width: 800px;
+			margin: auto;
+		}
 
-    .slider-inner {
-      white-space: nowrap;
-      transition: transform 0.3s ease-out;
-    }
+		.slider-inner {
+			white-space: nowrap;
+			transition: transform 0.3s ease-out;
+		}
 
-    .slider-inner img {
-      width: calc(33.333% - 20px);
-      width: 245px;
-      height: 400px;
-      margin: 5px;
-      margin-right: 5px;
-      box-sizing: border-box;
-      display: inline-block;
-      vertical-align: top;
-      object-fit: cover;
+		.slider-inner img {
+			width: calc(33.333% - 20px);
+			width: 245px;
+			height: 400px;
+			margin: 5px;
+			margin-right: 5px;
+			box-sizing: border-box;
+			display: inline-block;
+			vertical-align: top;
+			object-fit: cover;
 
-    }
+		}
 
-    .timeline-widget .timeline-item {
-      min-height: 147px !important;
-    }
+		.timeline-widget .timeline-item {
+			min-height: 147px !important;
+		}
 
-    .btn-primary {
-      background-color: #4F886D !important;
-      border-color: #4F886D !important;
-    }
-  </style>
+		.btn-primary {
+			background-color: #4F886D !important;
+			border-color: #4F886D !important;
+		}
+	</style>
 
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f7f7f7;
-    }
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f7f7f7;
+		}
 
-    .header {
-      background-color: #4F886D;
-      color: white;
-      padding: 50px;
-      text-align: center;
-    }
+		.header {
+			background-color: #4F886D;
+			color: white;
+			padding: 50px;
+			text-align: center;
+		}
 
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f7f7f7;
-    }
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f7f7f7;
+		}
 
-    .header {
-      background-color: #4F886D;
-      color: white;
-      padding: 10px;
-      text-align: center;
-    }
+		.header {
+			background-color: #4F886D;
+			color: white;
+			padding: 10px;
+			text-align: center;
+		}
 
-    .footer {
-      background-color: #f9fafa;
-      color: #4F886D;
-      padding: 10px;
-      text-align: center;
-    }
-  </style>
+		.footer {
+			background-color: #f9fafa;
+			color: #4F886D;
+			padding: 10px;
+			text-align: center;
+		}
+	</style>
 </head>
+
 <body>
-<div class="header">
-  <a href="https://imgbb.com/"><img src="https://i.ibb.co/HhzKT1w/logo.png" alt="logo" width="200"></a>
-</div>
-    <div class="body-wrapper">
-      <header class="mx-4">
-          <div class="navbar-collapse justify-content-end px-0" id="navbarNav">
-            <ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end mt-4 mb-3">
-              <a href="http://localhost:8090/chat" target="_blank" class="btn btn-primary">실시간 채팅하기</a>
-            </ul>
-          </div>
-      </header>
+	<div class="header">
+		<a href="https://imgbb.com/"><img src="https://i.ibb.co/HhzKT1w/logo.png" alt="logo" width="200"></a>
+	</div>
+	<div class="body-wrapper">
+		<header class="mx-4">
+			<div class="navbar-collapse justify-content-end px-0" id="navbarNav">
+				<ul class="navbar-nav flex-row ms-auto align-items-center justify-content-end mt-4 mb-3">
+					<a href="http://localhost:8090/chat" target="_blank" class="btn btn-primary">실시간 채팅하기</a>
+				</ul>
+			</div>
+		</header>
+		<h1>{{totalCount}} 전체방문자 수</h1>
+		<h1>{{dayCount}} 오늘 방문자 수</h1>
+		{{#weekCount}}
+		<ul>
+			<li>{{.}}</li>
+		</ul>
+		{{/weekCount}}
+		<!-- 차트 -->
+		<div class="row">
+			<div class="col-lg-8 d-flex align-items-strech">
+				<div class="card w-100">
+					<div class="card-body">
+						<div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
 
-      <!-- 차트 -->
-      <div class="row">
-        <div class="col-lg-8 d-flex align-items-strech">
-          <div class="card w-100">
-            <div class="card-body">
-              <div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
+							<div class="mb-3 mb-sm-0">
+								<h5 class="card-title fw-semibold">차트추가!</h5>
+							</div>
 
-                <div class="mb-3 mb-sm-0">
-                  <h5 class="card-title fw-semibold">차트추가!</h5>
-                </div>
+						</div>
+						<div id="chart"></div>
+					</div>
+				</div>
+			</div>
 
-              </div>
-              <div id="chart"></div>
-            </div>
-          </div>
-        </div>
+			<!-- 방문자수 -->
+			<div class="col-lg-4">
+				<div class="row">
+					<div class="col-lg-12">
+						<div class="card overflow-hidden">
+							<div class="card-body p-4">
+								<h5 class="card-title mb-9 fw-semibold">총 방문자 수</h5>
+								<div class="row align-items-center">
+									<div class="col-8">
+										<h4 class="fw-semibold mb-3">521명</h4>
+										<div class="d-flex align-items-center">
+											<div class="me-4">
+												<span
+													class="round-8 bg-primary rounded-circle me-2 d-inline-block"></span>
+												<span class="fs-2">2023</span>
+											</div>
+										</div>
+									</div>
+									<div class="col-4">
+										<div class="d-flex justify-content-center">
+											<div id="breakup"></div>
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="col-lg-12">
+						<div class="card">
+							<div class="card-body">
+								<div class="row alig n-items-start">
+									<div class="col-8">
+										<h5 class="card-title mb-9 fw-semibold">오늘 방문자 수 </h5>
+										<h4 class="fw-semibold mb-3">1</h4>
+									</div>
+								</div>
+							</div>
+							<div id="earning"></div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
-        <!-- 방문자수 -->
-        <div class="col-lg-4">
-          <div class="row">
-            <div class="col-lg-12">
-              <div class="card overflow-hidden">
-                <div class="card-body p-4">
-                  <h5 class="card-title mb-9 fw-semibold">총 방문자 수</h5>
-                  <div class="row align-items-center">
-                    <div class="col-8">
-                      <h4 class="fw-semibold mb-3">521명</h4>
-                      <div class="d-flex align-items-center">
-                        <div class="me-4">
-                          <span class="round-8 bg-primary rounded-circle me-2 d-inline-block"></span>
-                          <span class="fs-2">2023</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="col-4">
-                      <div class="d-flex justify-content-center">
-                        <div id="breakup"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="col-lg-12">
-              <div class="card">
-                <div class="card-body">
-                  <div class="row alig n-items-start">
-                    <div class="col-8">
-                      <h5 class="card-title mb-9 fw-semibold">오늘 방문자 수 </h5>
-                      <h4 class="fw-semibold mb-3">1</h4>
-                    </div>
-                  </div>
-                </div>
-                <div id="earning"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+		<div class="row">
+			<div class="col-lg-4 d-flex align-items-stretch">
+				<div class="card w-100">
+					<div class="card-body p-4">
+						<div class="mb-4">
+							<h5 class="card-title fw-semibold mb-4" style="font-size: 24px;"><a
+									href="http://localhost:8090/board/list/0">책갈피</a></h5>
+						</div>
+						{{#mainList.galleryList}}
+						<div class="timeline-widget mb-18 position-relative mb-n5">
+							<div class="timeline-item d-flex position-relative overflow-hidden">
+								<div class="timeline-time text-dark flex-shrink-0 text-end">{{title}}</div>
+								<div class="timeline-badge-wrap d-flex flex-column align-items-center">
+									<span
+										class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
+									<span class="timeline-badge-border d-block flex-shrink-0"></span>
+								</div>
+								<div class="timeline-desc fs-3 text-dark mt-n1" style="margin-top: 20px;">저자:
+									{{author}}, 출판사: {{publisher}}</div>
+							</div>
+						</div>
+						{{/mainList.galleryList}}
+					</div>
+				</div>
+			</div>
+			<div class="col-lg-8 d-flex align-items-stretch">
+				<div class="card w-100">
+					<div class="card-body p-4">
+						<h5 class="card-title fw-semibold mb-4" style="font-size: 24px;"><a
+								href="http://localhost:8090/gallery/list/0">인기 도서(책장)📚</a></h5>
+						<div class="table-responsive">
+							{{#mainList.galleryList}}
+							- {{title}} (저자: {{author}}, 출판사: {{publisher}})
+							{{/mainList.galleryList}}
+							<div class="slider-container" id="gallery-Hot-5">
+								<div class="slider-inner" id="galleryImgs">
+									<img id="galleryImg-1" src="images/book/1.jpeg" alt="dummy1">
+									<img id="galleryImg-2" src="images/book/2.jpeg" alt="dummy2">
+									<img id="galleryImg-3" src="images/book/3.jpeg" alt="dummy3">
+									<img id="galleryImg-4" src="images/book/4.jpeg" alt="dummy4">
+									<img id="galleryImg-5" src="images/book/5.jpeg" alt="dummy5">
+									<img id="galleryImg-6" src="images/book/1.jpeg" alt="dummy1">
+									<img id="galleryImg-7" src="images/book/2.jpeg" alt="dummy2">
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-      <div class="row">
-        <div class="col-lg-4 d-flex align-items-stretch">
-          <div class="card w-100">
-            <div class="card-body p-4">
-             <div class="mb-4">
-               <h5 class="card-title fw-semibold mb-4" style="font-size: 24px;"><a href="http://localhost:8090/board/list/0">책갈피</a></h5>
-              </div>
-              {{#mainList.galleryList}}
-              <div class="timeline-widget mb-18 position-relative mb-n5">
-                <div class="timeline-item d-flex position-relative overflow-hidden">
-                  <div class="timeline-time text-dark flex-shrink-0 text-end">{{title}}</div>
-                  <div class="timeline-badge-wrap d-flex flex-column align-items-center">
-                    <span class="timeline-badge border-2 border border-primary flex-shrink-0 my-8"></span>
-                    <span class="timeline-badge-border d-block flex-shrink-0"></span>
-                  </div>
-                  <div class="timeline-desc fs-3 text-dark mt-n1" style="margin-top: 20px;">저자: {{author}}, 출판사: {{publisher}}</div>
-                </div>
-              </div>
-              {{/mainList.galleryList}}
-            </div>
-          </div>
-        </div>
-        <div class="col-lg-8 d-flex align-items-stretch">
-          <div class="card w-100">
-            <div class="card-body p-4">
-              <h5 class="card-title fw-semibold mb-4" style="font-size: 24px;"><a href="http://localhost:8090/gallery/list/0">인기 도서(책장)📚</a></h5>
-              <div class="table-responsive">
-                {{#mainList.galleryList}}
-                - {{title}} (저자: {{author}}, 출판사: {{publisher}})
-                {{/mainList.galleryList}}
-                <div class="slider-container" id="gallery-Hot-5">
-                  <div class="slider-inner" id="galleryImgs">
-                    <img id="galleryImg-1" src="images/book/1.jpeg" alt="dummy1">
-                    <img id="galleryImg-2" src="images/book/2.jpeg" alt="dummy2">
-                    <img id="galleryImg-3" src="images/book/3.jpeg" alt="dummy3">
-                    <img id="galleryImg-4" src="images/book/4.jpeg" alt="dummy4">
-                    <img id="galleryImg-5" src="images/book/5.jpeg" alt="dummy5">
-                    <img id="galleryImg-6" src="images/book/1.jpeg" alt="dummy1">
-                    <img id="galleryImg-7" src="images/book/2.jpeg" alt="dummy2">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
+	<div class="footer">
+		<p>© 2023 READER. All rights reserved.</p>
+	</div>
 
-<div class="footer">
-  <p>© 2023 READER. All rights reserved.</p>
-</div>
-
-  </div>
-  <script src="../assets/libs/jquery/dist/jquery.min.js"></script>
-  <script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-  <script src="../assets/js/sidebarmenu.js"></script>
-  <script src="../assets/js/app.min.js"></script>
-  <script src="../assets/libs/simplebar/dist/simplebar.js"></script>
+	</div>
+	<script src="../assets/libs/jquery/dist/jquery.min.js"></script>
+	<script src="../assets/libs/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+	<script src="../assets/js/sidebarmenu.js"></script>
+	<script src="../assets/js/app.min.js"></script>
+	<script src="../assets/libs/simplebar/dist/simplebar.js"></script>
 </body>
 
 </html>
 <script>
-  $(() => {
-    const sliderInner = $("#galleryImgs");
-    const totalImages = sliderInner.children().length - 2;
-    const imageWidth = sliderInner.find('img').first().outerWidth(true);
-    const totalWidth = imageWidth * totalImages;
-    sliderInner.width(totalWidth);
+	$(() => {
+		const sliderInner = $("#galleryImgs");
+		const totalImages = sliderInner.children().length - 2;
+		const imageWidth = sliderInner.find('img').first().outerWidth(true);
+		const totalWidth = imageWidth * totalImages;
+		sliderInner.width(totalWidth);
 
-    let currentIndex = 0;
-    let isDragging = false;
-    let startPos = 0;
-    let currentTranslate = 0;
-    let animationInterval;
+		let currentIndex = 0;
+		let isDragging = false;
+		let startPos = 0;
+		let currentTranslate = 0;
+		let animationInterval;
 
-    function slideImage(index, noAnimation = false) {
-      if (noAnimation) {
-        sliderInner.css("transition", "none");
-      } else {
-        sliderInner.css("transition", "transform 0.3s ease-out");
-      }
-      currentTranslate = -index * imageWidth;
-      sliderInner.css("transform", `translateX(${currentTranslate}px)`);
+		function slideImage(index, noAnimation = false) {
+			if (noAnimation) {
+				sliderInner.css("transition", "none");
+			} else {
+				sliderInner.css("transition", "transform 0.3s ease-out");
+			}
+			currentTranslate = -index * imageWidth;
+			sliderInner.css("transform", `translateX(${currentTranslate}px)`);
 
-      // 순환 로직
-      if (index >= totalImages - 2) {
-        currentIndex = 0;
-        setTimeout(() => slideImage(currentIndex, false), 300);
-      }
-    }
+			// 순환 로직
+			if (index >= totalImages - 2) {
+				currentIndex = 0;
+				setTimeout(() => slideImage(currentIndex, false), 300);
+			}
+		}
 
-    // 자동 슬라이드 시작 함수
-    function startAutoSlide() {
-      animationInterval = setInterval(() => {
-        currentIndex++;
-        if (currentIndex >= totalImages ) {
-          currentIndex = 0;
-          slideImage(currentIndex, false);
-        } else {
-          slideImage(currentIndex);
-        }
-      }, 3000);
-    }
+		// 자동 슬라이드 시작 함수
+		function startAutoSlide() {
+			animationInterval = setInterval(() => {
+				currentIndex++;
+				if (currentIndex >= totalImages) {
+					currentIndex = 0;
+					slideImage(currentIndex, false);
+				} else {
+					slideImage(currentIndex);
+				}
+			}, 3000);
+		}
 
-    function stopAutoSlide() {
-      clearInterval(animationInterval);
-    }
-    startAutoSlide();
+		function stopAutoSlide() {
+			clearInterval(animationInterval);
+		}
+		startAutoSlide();
 
 
-    // 차트 호출 테스트
-    console.log("차트 호출 함수 진행 중입니다.");
-    $.ajax({
-      url: "/chart",
-      method: "get",
-      dataType: "json",
-      data: {
-        totalVisiteCount: "totalVisiteCount",
-        dayVisiteCount: "dayVisiteCount",
-        weekVisitorCount: "weekVisitorCount",
-      }
-    })
-            .done((res) => {
-              console.log(res);
-            })
-            .fail((res, err, status) => {
-              console.log("fail res : " + res);
-              console.log("fail err : " + err);
-              console.log("fail status : " + status); // 오타 수정: staus -> status
-            });
-  });
+
+	});
 
 </script>

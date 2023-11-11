@@ -43,7 +43,19 @@ public class MainService {
 		return viewMain;
 	}
 
-	// DB 결과 값 확인
+	// 보드 게시판 불러오기
+	public List<BoardDTO> getHotBoard(Integer mainViewImg) {
+		List<BoardDTO> getBoard = mainDAO.getHotBoard(mainViewImg);
+		return getBoard;
+	}
+
+	// 갤러리 게시판 불러오기
+	public List<GalleryDTO> getHotGallery(Integer mainViewImg) {
+		List<GalleryDTO> getGallery = mainDAO.getHotGallery(mainViewImg);
+		return getGallery;
+	}
+
+	// 게시판과 갤러리 DB 결과 값 확인
 	private Map<String, List<?>> handleViewMain(List<GalleryDTO> getGallery, List<BoardDTO> getBoard) {
 		Map<String, List<?>> resultMap = new HashMap<>();
 		String resultMesg = Constant.FALSE_MESG;
@@ -58,12 +70,63 @@ public class MainService {
 		return resultMap;
 	}
 
+	// 전체 방문자 수 가져오기
+	public Integer totalVisiteCount() {
+		Integer totalVisitor = mainDAO.getTotalVisiteCount();
+		Integer checkValue = checkValueVisitor(totalVisitor);
+		return checkValue;
+	}
+
+	// 하루 방문자 수 가져오기
+	public Integer dayVisiteCount() {
+		Integer totalDayVisitor = mainDAO.getDayVisiteCount();
+		Integer checkValue = checkValueVisitor(totalDayVisitor);
+		return checkValue;
+	}
+
+	// 전체 방문자와 하루 방문자 값 확인해서 보내주기.
+	private Integer checkValueVisitor(Integer visitor) {
+		//0일 때
+		if (visitor == Constant.MIN_VISITOR)
+			visitor = 1;
+		else if (visitor > Constant.MIN_VISITOR)
+			return visitor;
+		else
+			// 여기다가 로그도 남기는 것이 더 좋습니다.
+			throw new IllegalArgumentException(Constant.UNKNOWN_VALUE);
+		return null;
+
+	}
+
+	// 7일간 각 일 방문자 수 가져오기
+	public List<VisitorCountDTO> weekVisiteCount() {
+		List<VisitorCountDTO> totalVisitor = mainDAO.getWeekVisiteCount();
+		List<VisitorCountDTO> checkValue = checkValueVisitorTypeList(totalVisitor);
+		return checkValue;
+	}
+
+	// 7일간 각 일일 방문자 수 DB값 체크
+	private List<VisitorCountDTO> checkValueVisitorTypeList(List<VisitorCountDTO> totalVisitor) {
+		//사이즈가 0 이거나 null일 때
+		if (totalVisitor.size() == Constant.MIN_VISITOR || totalVisitor == null)
+			totalVisitor = Collections.emptyList();
+		else if (totalVisitor.size() > Constant.MIN_VISITOR)
+			return totalVisitor;
+		else
+			//여기다가 로그도 남기는 편이 좋습니다.
+			throw new IllegalArgumentException(Constant.UNKNOWN_VALUE);
+		return null;
+
+	}
+
+	//방문자 권한 체크 부분 입니다.
+
 	// 방문자 확인
 	private void checkVisistCount() {
 		String guestIp = IPconfig.getIp(SessionConfig.getSession());
 		Integer newUser = mainDAO.checkGuest(guestIp); // 첫 방문자인지 아니면 처음 방문자가 아닌지 확인
 		if (newUser != Constant.MIN_VISITOR)
-			mainDAO.insertVisitor(guestIp); // 방문자 추가
+			mainDAO.insertVisitor(guestIp); // 0이 아닐 때 방문자 추가
 		else
 			updateGuest(guestIp);
 //		else
@@ -94,6 +157,8 @@ public class MainService {
 	private boolean compareUpdateGuest(VisitorDTO lastVisiteDTO, VisitorDTO visitor) {
 		LocalDateTime date = converterToTime(lastVisiteDTO.getVisiteTm());
 		LocalDateTime compareDate = converterToTime(visitor.getVisiteTm());
+		System.err.println(date);
+		System.err.println(compareDate);
 		Duration duration = Duration.between(date, compareDate);
 		if (duration.toDays() <= 1)
 			return true;
@@ -114,82 +179,5 @@ public class MainService {
 		return localDateTime;
 	}
 
-	// 보드 게시판 불러오기
-	public List<BoardDTO> getHotBoard(Integer mainViewImg) {
-		List<BoardDTO> getBoard = mainDAO.getHotBoard(mainViewImg);
-		return getBoard;
-	}
-
-	// 갤러리 게시판 불러오기
-	public List<GalleryDTO> getHotGallery(Integer mainViewImg) {
-		List<GalleryDTO> getGallery = mainDAO.getHotGallery(mainViewImg);
-		return getGallery;
-	}
-
-	// 전체 방문자 수 가져오기
-	public Map<String, Integer> totalVisiteCount() {
-		Map<String, Integer> resultMap = new HashMap<>();
-		Integer totalVisitor = mainDAO.getTotalVisiteCount();
-		resultMap = handleVisisteCount(totalVisitor);
-		return resultMap;
-	}
-
-	// 하루 방문자 수 가져오기
-	public Map<String, Integer> dayVisiteCount() {
-		Map<String, Integer> resultMap = new HashMap<>();
-		Integer totalVisitor = mainDAO.getDayVisiteCount();
-		resultMap = handleVisisteCount(totalVisitor);
-		return resultMap;
-	}
-
-	// 7일간 방문자 수 가져오기
-	public Map<String, List<VisitorCountDTO>> weekVisiteCount() {
-		Map<String, List<VisitorCountDTO>> resultMap = new HashMap<>();
-		Date sixDayAgoDay = inserWeekVisiteValue();
-		List<VisitorCountDTO> totalVisitor = mainDAO.getWeekVisiteCount(sixDayAgoDay);
-		System.err.println("totalVisitor::" + totalVisitor);
-		resultMap = handleWeekVisisteCount(totalVisitor);
-		return resultMap;
-	}
-
-	// 급하면 쓰는구나;;
-	private Date inserWeekVisiteValue() {
-		LocalDateTime sixDaysAgo = LocalDateTime.now().minusDays(6);
-		System.err.println("sixDaysAgo ::" + sixDaysAgo);
-		Date sixDayAgoDay = dateFormat(sixDaysAgo);
-		return sixDayAgoDay;
-	}
-
-	// DATE 형식 변환 mapper 에러 주의
-	private Date dateFormat(LocalDateTime Time) {
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-		String dateForm = Time.format(formatter);
-		LocalDate localDate = LocalDate.parse(dateForm, formatter);
-		Date inputValue = Date.valueOf(localDate);
-		System.err.println("dateFormat::"+inputValue);
-		return inputValue;
-	}
-
-	// 방문자 수 DB결과 값 따른 리턴
-	private Map<String, Integer> handleVisisteCount(Integer totalVisitor) {
-		Map<String, Integer> resultMap = new HashMap<>();
-		String resultMesg = Constant.FALSE_MESG;
-		if (totalVisitor > Constant.MIN_VISITOR)
-			resultMap.put(Constant.SUCCESS_MESG, totalVisitor);
-		else
-			resultMap.put(resultMesg, Constant.MIN_VISITOR);
-		return resultMap;
-	}
-
-	// 주간 방문자 DB결과 값 따른 리턴
-	private Map<String, List<VisitorCountDTO>> handleWeekVisisteCount(List<VisitorCountDTO> totalVisitor) {
-		Map<String, List<VisitorCountDTO>> resultMap = new HashMap<>();
-		String resultMesg = Constant.FALSE_MESG;
-		if (!totalVisitor.isEmpty())
-			resultMap.put(Constant.SUCCESS_MESG, totalVisitor);
-		else
-			resultMap.put(resultMesg, Collections.emptyList());
-		return resultMap;
-	}
 
 }

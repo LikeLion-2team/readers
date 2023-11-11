@@ -3,6 +3,8 @@ package com.project.readers.controller;
 import java.util.List;
 import java.util.Map;
 
+import com.project.readers.config.SessionConfig;
+import com.project.readers.entity.UserSessionDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,6 +35,11 @@ public class MainController {
 		model.addAttribute("totalCount", totalVisiteCount);
 		model.addAttribute("dayCount", dayVisiteCount);
 		model.addAttribute("weekCount", weekVisitorCount);
+		model.addAttribute("user_id", SessionConfig.getSessionDTO());
+		UserSessionDTO loginUser = SessionConfig.getSessionDTO();
+		if(loginUser != null){
+			model.addAttribute("user_name", loginUser.getId());
+		}
 		return "./html/ui-card"; // mainpage
 	}
 

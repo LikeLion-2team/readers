@@ -1,8 +1,6 @@
 package com.project.readers.repository;
 
-import java.sql.Date;
 import java.util.List;
-import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 
@@ -19,7 +17,7 @@ public interface MainDAO {
 	List<GalleryDTO> getHotGallery(Integer mainViewImg); //5개
 
 	Integer checkGuest(String guestIp);
-	
+
 	void insertVisitor(String guestIp);
 
 	void countPlusVisist(String guestIp);
@@ -30,7 +28,7 @@ public interface MainDAO {
 
 	Integer getDayVisiteCount();
 
-	List<VisitorCountDTO> getWeekVisiteCount(Date sixDayAgoDay);
+	List<VisitorCountDTO> getWeekVisiteCount();
 
 
 

@@ -1,6 +1,6 @@
 var stompClient = null;
-let id = document.getElementById("roomid").value;
-console.log(id)
+let id = document.getElementById("id").value;
+console.log(id);
 var chatRoomId = 1;
 
 function setConnected(connected) {
@@ -83,4 +83,3 @@ $(document).ready(function () {
     $("#disconnect").click(function() { disconnect(); });
     $("#send-button").click(function() { send(); });
 });
-

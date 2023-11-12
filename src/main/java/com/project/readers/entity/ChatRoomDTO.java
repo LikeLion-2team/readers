@@ -8,15 +8,15 @@ import lombok.ToString;
 @Getter
 @Setter
 public class ChatRoomDTO {
-    // 채팅 방 아이디 
-    private int chatRoomId;
+    // 채팅 방 아이디
+    private Integer chatRoomId = 1;
 
-    // 카테고리 도메인 
+    // 카테고리 도메인
     private String catDomain;
 
-    // 아이디 
+    // 관리자 아이디
     private String id;
 
-    // 채팅 방 이름 
+    // 채팅 방 이름
     private String chatRoomName;
 }

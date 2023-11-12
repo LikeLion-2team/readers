@@ -1,38 +1,27 @@
 package com.project.readers.controller;
 
-import com.project.readers.entity.UserSessionDTO;
 import com.project.readers.service.ChatRoomService;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+
+import java.util.HashMap;
+import java.util.Map;
+
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/chat")
 public class ChatRoomController {
-    @Autowired
     private final ChatRoomService chatRoomService;
 
-    @GetMapping()
-    public String enterChatRoom() {
+    @GetMapping("/chat")
 
-        return chatRoomService.enterChatRoom();
+    public String enterChatRoom(Model model) {
+    	String accessId = chatRoomService.accessId();
+    	model.addAttribute("accessId",accessId);
+    	return chatRoomService.enterChatRoom();
     }
 
-    @GetMapping("/room")
-    public String showChat(HttpServletRequest request) {
-
-        HttpSession session = request.getSession();
-        UserSessionDTO sessionDTO = new UserSessionDTO();
-        sessionDTO.setId("admin");
-        sessionDTO.setRoleNum(3);
-        session.setAttribute("chatRoomDTO", sessionDTO);
-
-        return "chat"; // main 페이지로 수정
-    }
 
 }

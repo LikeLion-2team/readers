@@ -4,6 +4,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.project.readers.common.Constant;
+import com.project.readers.config.UserRoleConfig.UserRole;
 import com.project.readers.entity.UserSessionDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,7 +21,7 @@ public class SessionConfig {
 
 	public static UserSessionDTO getSessionDTO() {
 		HttpSession session = getSession();
-		UserSessionDTO usersessionDTO = (UserSessionDTO)session.getAttribute(Constant.USER_INFO);
-		return usersessionDTO;
+		UserSessionDTO userSessionDTO = (UserSessionDTO)session.getAttribute(Constant.USER_INFO);
+		return userSessionDTO;
 	}
 }

@@ -15,14 +15,17 @@ public class AdminCheckInterceptor implements HandlerInterceptor {
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
-		Integer roleNum = handleSessionDTO();
-		if (roleNum != UserRole.ADMIN.getLevel())
-			return false;
-		else if (roleNum == UserRole.ADMIN.getLevel())
-			return true;
-		else
-			throw new IllegalArgumentException(Constant.UNKNOWN_ACCESS);
 
+		Integer roleNum = handleSessionDTO();
+
+		if (roleNum != UserRole.ADMIN.getLevel()) {
+			response.sendRedirect("/");
+			return false;
+		} else if (roleNum == UserRole.ADMIN.getLevel()) {
+			return true;
+		} else {
+			throw new IllegalArgumentException(Constant.UNKNOWN_ACCESS);
+		}
 	}
 
 	private Integer handleSessionDTO() {

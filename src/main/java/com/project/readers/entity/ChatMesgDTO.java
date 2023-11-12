@@ -8,14 +8,14 @@ import lombok.ToString;
 @Getter
 @Setter
 public class ChatMesgDTO {
-  
-	// 메세지 아이디 
+
+	// 메세지 아이디
     private Long mesgId;
 
-    // 채팅 방 아이디 
+    // 채팅 방 아이디
     private Long chatRoomId;
 
-    // 메세지 내용 
+    // 메세지 내용
     private String mesgContent;
 
     private String id;

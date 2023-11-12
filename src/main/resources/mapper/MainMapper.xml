@@ -110,7 +110,7 @@
 
 	<select id="getDayVisiteCount" resultType="Integer" >
 		SELECT
-				COUNT(VISITOR_NUM)
+				COUNT(*)
 		FROM
 				TB_VISITOR VISITOR
 		WHERE

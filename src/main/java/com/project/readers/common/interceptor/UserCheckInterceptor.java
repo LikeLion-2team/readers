@@ -12,11 +12,12 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 public class UserCheckInterceptor implements HandlerInterceptor {
-	@SuppressWarnings("unused")
 	@Override
 	public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler)
 			throws Exception {
+
 		Integer roleNum = handleSessionDTO();
+
 		if (roleNum == null) {
 			response.sendRedirect("/");
 			return false;
@@ -29,7 +30,7 @@ public class UserCheckInterceptor implements HandlerInterceptor {
 	}
 
 	private Integer handleSessionDTO() {
-		Integer roleNum = 0;
+		Integer roleNum = UserRole.GUEST.getLevel();
 		UserSessionDTO userSessionDTO = SessionConfig.getSessionDTO();
 		if (userSessionDTO == null)
 			roleNum = null;

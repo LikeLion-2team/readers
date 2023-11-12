@@ -88,7 +88,7 @@ public class MainService {
 	// 전체 방문자와 하루 방문자 값 확인해서 보내주기.
 	private Integer checkValueVisitor(Integer visitor) {
 		// 0일 때
-		if (visitor == Constant.MIN_VISITOR)
+		if (visitor == Constant.MIN_VISITOR||visitor==null)
 			visitor = 1;
 		else if (visitor > Constant.MIN_VISITOR)
 			return visitor;

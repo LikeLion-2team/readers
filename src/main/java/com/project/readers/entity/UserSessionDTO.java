@@ -7,5 +7,5 @@ import lombok.Setter;
 @Setter
 public class UserSessionDTO {
     private String id;
-    private int roleNum;
+    private Integer roleNum;
 }

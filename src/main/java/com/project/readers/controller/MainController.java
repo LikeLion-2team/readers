@@ -35,11 +35,6 @@ public class MainController {
 		model.addAttribute("totalCount", totalVisiteCount);
 		model.addAttribute("dayCount", dayVisiteCount);
 		model.addAttribute("weekCount", weekVisitorCount);
-		model.addAttribute("user_id", SessionConfig.getSessionDTO());
-		UserSessionDTO loginUser = SessionConfig.getSessionDTO();
-		if(loginUser != null){
-			model.addAttribute("user_name", loginUser.getId());
-		}
 		return "./html/ui-card"; // mainpage
 	}
 

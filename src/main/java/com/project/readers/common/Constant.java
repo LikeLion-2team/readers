@@ -12,6 +12,8 @@ public final class Constant {
 	public static final Integer MIN_VISITOR = 0;
 	public static final String UNKNOWN_ACCESS="알 수 없는 접근입니다.";
 	public static final String UNKNOWN_VALUE="알 수 없는 값 입니다.";
-	private static final Integer COMPARE_PASSWORD = 1;
+	public static final Integer COMPARE_PASSWORD = 1;
+	public static final Integer FALSE_VALUE = 0;
+	public static final Integer FIND_USER_ID = 1;
 
 }

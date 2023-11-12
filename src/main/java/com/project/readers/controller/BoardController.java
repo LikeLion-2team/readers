@@ -5,7 +5,6 @@ import com.project.readers.entity.BoardDTO;
 import com.project.readers.service.BoardService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -16,14 +15,12 @@ import java.util.List;
 @Controller
 @RequestMapping("/board")
 @RequiredArgsConstructor    // 의존성주입
-@Log4j2
 public class BoardController {
 
     private final BoardService boardService;
 
     @GetMapping("/write")
     public String writeBoard() {
-        log.info("writeGet....");
         return "/board/board_write";
     }
 
@@ -31,8 +28,6 @@ public class BoardController {
     @PostMapping("/save")
     @ResponseBody
     public HashMap<String,Object> saveBoard(@Valid @RequestBody BoardDTO boardDTO) {
-
-        log.info("writePost....");
 
         HashMap<String,Object> map = new HashMap<String,Object>();
         try {

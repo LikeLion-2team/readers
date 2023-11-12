@@ -8,7 +8,6 @@ import com.project.readers.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -67,28 +66,13 @@ public class UserController {
 
     @GetMapping("/idcheck")
     @ResponseBody
-    public Map<String, Object> validateUserId(UserDTO dto) {
+    public Map<String, Object> validateUserId(UserDTO userDTO) {
 
         Map<String, Object> result = new HashMap<>();
-//
-//        if (userService.idCheck(dto)) {
-//            result.put("result", "success");
-//        } else {
-//            result.put("result", "fail");
-//        }
-        return result;
-    }
+        String compareId = userService.compareId(userDTO.getId());
 
-    @GetMapping("/emailcheck")
-    @ResponseBody
-    public Map<String, Object> validateUserEmail(UserDTO dto) {
-        Map<String, Object> result = new HashMap<>();
+        result.put("result", compareId);
 
-//        if (userService.emailCheck(dto)) {
-//            result.put("result", "success");
-//        } else {
-//            result.put("result", "fail");
-//        }
         return result;
     }
 
@@ -97,8 +81,11 @@ public class UserController {
         userService.updateUser(userDTO);
     }
 
-    @DeleteMapping("/delete")
-    public void deleteUser(int idNum) {
-        userService.deleteUser(idNum);
+    @GetMapping("/logout")
+    public String deleteUser(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        session.invalidate();
+
+        return "redirect:/";
     }
 }

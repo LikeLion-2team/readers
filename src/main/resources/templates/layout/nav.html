@@ -19,12 +19,12 @@
 
             <div class="d-flex">
                 {{#user_id}} <!--세션이 존재할때 -->
-                <strong>{{user_name}} <a href=/member/logout"">로그아웃</a></strong>
+                <strong>{{user_name}} <a href=/user/logout"">로그아웃</a></strong>
                 {{/user_id}}
 
                 {{^user_id}} <!-- 세션이 존재하지 않을 때 -->
                 <strong>
-                    <a href="/member/write">회원가입</a>&nbsp;<a href="/member/logon">로그온</a>
+                    <a href="/user/register">회원가입</a>&nbsp;<a href="/user/login">로그인</a>
                 </strong>
                 {{/user_id}}
             </div>

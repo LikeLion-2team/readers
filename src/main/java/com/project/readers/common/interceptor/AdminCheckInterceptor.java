@@ -29,7 +29,7 @@ public class AdminCheckInterceptor implements HandlerInterceptor {
 	}
 
 	private Integer handleSessionDTO() {
-		Integer roleNum = 0;
+		Integer roleNum = UserRole.GUEST.getLevel();
 		UserSessionDTO userSessionDTO = SessionConfig.getSessionDTO();
 		if (userSessionDTO == null)
 			roleNum = null;

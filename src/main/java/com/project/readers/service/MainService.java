@@ -65,7 +65,7 @@ public class MainService {
 			resultMap.put("galleryList", getGallery);
 			resultMap.put("boardList", getBoard);
 		} else {
-			log.error("handleViewMain에서 알 수 없는 값 발견 getGallery::" + getGallery + ", getBoard::" + getBoard);
+			// 다음에는 로그를 파일로 남겨보죠.
 			resultMap.put(resultMesg, Collections.emptyList());
 		}
 		return resultMap;
@@ -92,8 +92,7 @@ public class MainService {
 			visitor = 1;
 		else if (visitor > Constant.MIN_VISITOR)
 			return visitor;
-		else
-			log.error("checkValueVisitor 알수 없는 값 발견 visitor:: " + visitor);
+		// 다음에는 로그를 파일로 남겨보죠.
 		throw new IllegalArgumentException(Constant.UNKNOWN_VALUE);
 
 	}
@@ -112,8 +111,6 @@ public class MainService {
 			totalVisitor = Collections.emptyList();
 		else if (totalVisitor.size() > Constant.MIN_VISITOR)
 			return totalVisitor;
-		else
-			log.error("checkValueVisitorTypeList 알수 없는 값 발견 totalVisitor:: " + totalVisitor);
 		throw new IllegalArgumentException(Constant.UNKNOWN_VALUE);
 	}
 
@@ -124,15 +121,14 @@ public class MainService {
 		Integer newUser = mainDAO.checkGuest(guestIp); // 첫 방문자인지 아니면 처음 방문자가 아닌지 확인
 		if (newUser == Constant.MIN_VISITOR) // 첫 방문자 0 재방문자 1이상 0일때 인서트합니다.
 			mainDAO.insertVisitor(guestIp);
-		else
-			updateGuest(guestIp);
+		updateGuest(guestIp);
 	}
 
 	// 재방문자 업데이트 하루에 한번만 하도록 제한하는 기능입니다.
 	private void updateGuest(String guestIp) {
 		VisitorDTO lastVisiteDTO = mainDAO.getLastVisitTime(guestIp);
 		VisitorDTO visitor = handleVsitor(guestIp);
-		boolean checkUpdate = compareUpdateGuest(lastVisiteDTO, visitor); //언제 재방문했는지 확인하는 메서드입니다.
+		boolean checkUpdate = compareUpdateGuest(lastVisiteDTO, visitor); // 언제 재방문했는지 확인하는 메서드입니다.
 		if (checkUpdate) {
 			mainDAO.countPlusVisist(guestIp);
 		}
@@ -156,7 +152,6 @@ public class MainService {
 		Duration duration = Duration.between(date, compareDate); // duration:: 1보다 같거나 커야 증가합니다.
 		if (duration.toDays() >= 1)
 			return true;
-
 		return false;
 	}
 

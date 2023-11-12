@@ -27,14 +27,14 @@
 </nav>
 
 <div class="container mt-3">
-  <h1>회원가입</h1>
+  <h1>로그인</h1>
 
   <div class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="아이디">
+    <input type="text" class="form-control" name="id" id="id" placeholder="아이디">
   </div>
 
   <div class="input-group mb-3">
-    <input type="password" class="form-control" placeholder="패스워드">
+    <input type="password" class="form-control" name="pw" id="pw" placeholder="패스워드">
   </div>
 
 
@@ -43,7 +43,7 @@
 
     <div class="btn-group">
 
-      <button type="button" class="btn btn-primary" onclick="goWrite()">로그인</button>&nbsp;&nbsp;
+      <button type="button" class="btn btn-primary" id="btnLogon">로그인</button>&nbsp;&nbsp;
 
       <button type="button" class="btn btn-primary" onclick="goCancel()">취소</button>&nbsp;&nbsp;
     </div>
@@ -55,19 +55,27 @@
 </html>
 
 <script>
-  function goWrite()
-  {
-    var frm = document.form;
-
-    window.location.href = "http://localhost:8090/";
-    frm.submit();
-
-  }
-
-  function goCancel()
-  {
-    var frm = document.form;
-    frm.action="/board/list";
-    frm.submit();
-  }
+  $(()=>{
+    $("#btnLogon").click(()=>{
+      $.ajax({
+        url:"/user/login",
+        data:{
+          id:$("#id").val(),
+          pw:$("#pw").val()
+        },
+        dataType:"json",
+        method:"post"
+      })
+              .done( (res)=>{
+                console.log( res );
+                if( res.resultCode =="1")
+                {
+                  location.href="/";
+                }
+              })
+              .fail((res, error, status)=>{
+                console.log(error)
+              })
+    });
+  })
 </script>

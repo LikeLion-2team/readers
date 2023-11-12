@@ -1,17 +1,25 @@
-<!DOCTYPE html>
-<html>
-<head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
-</head>
+{{>layout/header}}
+
 <body>
-	{{#bookInfo}}
-	<img width="200" height="300" src="/images/book/{{{galleryNum}}}.jpeg">
-	책 제목: {{title}}
-	저자: {{author}}
-	출판사: {{publisher}}
-	{{/bookInfo}}
-	
-	<a href="/board/list/0"><button type="button">책갈피 남기기</button></a>
+	{{>layout/nav}}
+	<div class="card-body position-absolute top-50 start-50 translate-middle">
+		<div class="row">
+			<div class="">
+				<div class="card">
+					{{#bookInfo}}
+					<img width="200" height="600" src="/images/book/{{{galleryNum}}}.jpeg" class="card-img-top" alt="...">
+					<div class="card-body">
+						<h5 class="card-title">{{title}}</h5>
+						<p class="card-text">{{author}}</p>
+						<p class="card-text">{{publisher}}</p>
+						<a href="/gallery/list/0" class="btn btn-primary">책장 가기</a>
+						<a href="/board/list/0" class="btn btn-primary">책갈피 남기기</a>
+					</div>
+					{{/bookInfo}}
+				</div>
+			</div>
+		</div>
+	</div>
 </body>
+
 </html>

@@ -40,7 +40,7 @@ public class GalleryController {
 		galleryDTO.setSearchKey(keyword);
 		
 		List<GalleryDTO> bookList = galleryService.getList(galleryDTO);
-		String page = Pager.makePage(9, galleryService.getGalleryCount(), pg);
+		String page = Pager.makePage(8, galleryService.getGalleryCount(), pg);
 		
 		model.addAttribute("bookList", bookList);
 		model.addAttribute("page", page);

@@ -1,27 +1,29 @@
 let postReply = {
     init: function () {
         let _this = this;
-        $("#btn-save").on("click", function () {
+        $("#replyBtn-save").on("click", function () {
             _this.saveReply();
         });
-        $("#btn-update").on("click", function () {
+        $("#replyBtn-update").on("click", function () {
             _this.updateReply();
         });
-        $("#btn-delete").on("click", function () {
+        $("#replyBtn-delete").on("click", function () {
             _this.deleteReply();
         });
     },
     saveReply: function () {
 
         let data = {
-            content: $("#rplContent").val()
+            content: $("#rplContent").val(),
+            boardNum: parseInt(window.location.href.split('/').pop())
         };
         if(data.content ==''){
             alert('내용을 입력하세요');
             return;
         }
 
-        let boardNum = parseInt($("#boardNum").val(), 10);
+        let url = window.location.href;
+        let boardNum = url.split('/').pop();
         console.log(data);
 
         $.ajax({
@@ -38,6 +40,7 @@ let postReply = {
             alert(JSON.stringify(error));
         })
     },
+
     updateReply: function () {
         let rplNumVal = $("#id").val();
         if (isNaN(rplNumVal)) {
@@ -45,8 +48,8 @@ let postReply = {
             return;
         }
 
-        let id = parseInt($("#id").val(), 10);
-        let boardNum = parseInt($("#boardNum").val(), 10);
+        let url = window.location.href;
+        let boardNum = url.split('/').pop();
         let data = {
             content: $("#rplContent").val()
         };
@@ -60,7 +63,7 @@ let postReply = {
 
         $.ajax({
             type: "PUT"
-            , url: "/replies/update/" + boardNum
+            , url: "/replies/update/" + rplNumVal   // 수정할 댓글 번호를 URL에 포함
             , dataType: "json"
             , contentType: "application/json; charset=utf-8"
             , data: JSON.stringify(data)
@@ -77,6 +80,7 @@ let postReply = {
                 alert(JSON.stringify(error));
             })
     },
+
     deleteReply: function () {
         let rplNumVal = parseInt($("#id").val(), 10);
         if (isNaN(rplNumVal)) {
@@ -88,7 +92,7 @@ let postReply = {
 
         $.ajax({
             type: "DELETE"
-            , url: "/board/delete/" + id
+            , url: "/replies/delete/" + id
             , dataType: "json"
             , contentType: "application/json; charset=utf-8"
         })
@@ -106,4 +110,4 @@ let postReply = {
     }
 }
 
-postBoard.init();
+postReply.init();

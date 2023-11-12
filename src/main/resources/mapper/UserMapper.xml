@@ -9,6 +9,11 @@
         values (TB_USER_SEQ.NEXTVAL, #{id}, #{pw}, #{name}, #{email})
     </insert>
 
+    <insert id="insertRole" parameterType="UserDTO">
+        insert into MP_USER_ROLE(ROLE_NUM, ID)
+        values (2, #{id})
+    </insert>
+
     <select id="login" parameterType="UserDTO" resultType="UserSessionDTO">
         SELECT MEMBER.ID,
                ROLE.role_num
@@ -19,6 +24,12 @@
                  MEMBER.ID = "ROLE".ID
         WHERE MEMBER.id = #{id}
           AND MEMBER.PW = #{pw}
+    </select>
+
+    <select id="compareId" parameterType="String">
+        SELECT id
+        from TB_USER
+        where id = #{id}
     </select>
 
     <update id="update" parameterType="UserDTO">

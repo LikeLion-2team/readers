@@ -6,11 +6,14 @@ import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
 public interface UserDAO {
-    void register(UserDTO userDTO);
-
+    Integer register(UserDTO userDTO);
     UserSessionDTO login(UserDTO userDTO);
 
     void update(UserDTO userDTO);
 
     void delete(int idNum);
+
+    void insertRole(UserDTO userDTO);
+
+    String compareId(String id);
 }

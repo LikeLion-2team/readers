@@ -1,9 +1,11 @@
 {{>/layout/header}}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
 <body>
 <form name="myform" id="myform">
 
     {{>/layout/nav}}
-    <h4>게시글 상세 보기</h4>
+    <h4>책갈피 상세 보기</h4>
     <div class="col-md-12">
         <div class="col-md-4">
             <form>
@@ -34,61 +36,57 @@
     <div class="row mt-3">
         <div class="col-md-12">
             <div class="col-md-4 ">
-                <button class="btn btn-info  addReplyBtn">ADD REPLY</button>
+                <button class="btn btn-info  addReplyBtn">댓글 등록</button>
             </div>
             <ul class="list-group replyList">
             </ul>
         </div>
     </div>
 
-    <table class="table table-hover ">
+    <div class="row mt-3">
         <div class="col-md-12">
-            <div class="col-md-4">
+            <div class="col-md-4 ">
+                <table class="table table-hover ">
+                    <thead>
+                    <tr>
+                        <th>번호</th>
+                        <th>내용</th>
+                        <th>작성자</th>
+                        <th>작성시간</th>
+                    </tr>
+                    </thead>
 
-        <thead>
-        <tr>
-            <th>번호</th>
-            <th>내용</th>
-            <th>작성자</th>
-            <th>작성시간</th>
-        </tr>
-        </thead>
-
-        <tbody>
-        {{#replyList}}
-        <tr>
-            <td>{{rplNum}}</td>
-            <td><a href="/replies/update/{{rplNum}}">{{rplContent}}</a></td>
-            <td>{{creator}}</td>
-            <td>{{crtTm}}</td>
-        </tr>
-        {{/replyList}}
-        </tbody>
+                    <tbody>
+                    {{#replyList}}
+                    <tr>
+                        <td>{{rplNum}}</td>
+                        <td><a href="/replies/update/{{rplNum}}">{{rplContent}}</a></td>
+                        <td>{{creator}}</td>
+                        <td>{{crtTm}}</td>
+                    </tr>
+                    {{/replyList}}
+                    </tbody>
+                </table>
             </div>
         </div>
-    </table>
+    </div>
 
 
     <div class="modal registerModal" tabindex="-1">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title">Register Reply</h5>
+                    <h5 class="modal-title">댓글 등록</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="input-group mb-3">
-                        <span class="input-group-text">Reply Text</span>
-                        <input type="text" class="form-control replyText" >
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text">Replyer</span>
-                        <input type="text" class="form-control replyer" >
+                        <span class="input-group-text">내용</span>
+                        <textarea class="form-control replyText" name="rplContent" id="rplContent"></textarea>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-primary registerBtn">Register</button>
-                    <button type="button" class="btn btn-outline-dark closeRegisterBtn" >Close</button>
+                    <button type="button" class="btn btn-primary" id="replyBtn-save">등록</button>
                 </div>
             </div>
         </div>
@@ -105,14 +103,14 @@
                 </div>
                 <div class="modal-body">
                     <div class="input-group mb-3">
-                        <span class="input-group-text">Reply Text</span>
-                        <input type="text" class="form-control modifyText" >
+                        <span class="input-group-text">내용</span>
+                        <input type="text" class="form-control modifyText">
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-info modifyBtn">Modify</button>
-                    <button type="button" class="btn btn-danger removeBtn">Remove</button>
-                    <button type="button" class="btn btn-outline-dark closeModifyBtn">Close</button>
+                    <button type="button" class="btn btn-info modifyBtn" id="replyBtn-update">수정</button>
+                    <button type="button" class="btn btn-danger removeBtn" id="replyBtn-delete">삭제</button>
+                    <button type="button" class="btn btn-outline-dark closeModifyBtn">취소</button>
                 </div>
             </div>
         </div>
@@ -122,4 +120,21 @@
 
 <script src="/js/board.js"></script>
 <script src="/js/reply.js"></script>
+<script>
+    $(document).ready(function () {
+        $(".addReplyBtn").click(function () {
+            $(".registerModal").modal("show");
+        });
+    });
+    $(document).ready(function() {
+        $('.comment-content').on('click', function() {
+            let commentContent = $(this).text();
+            let commentId = $(this).data('id');
 
+            $('#rplContent').val(commentContent);
+            $('#id').val(commentId);
+
+            $('#replyModal').modal('show');
+        });
+    });
+</script>

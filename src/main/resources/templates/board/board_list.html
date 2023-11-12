@@ -1,64 +1,126 @@
-{{>/layout/header}}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!--엣지에서도 돌아가게 해주는 명령어 브라우저 지원해주는 명령어-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!--자동 화면 조절해주는 스케일 모바일 지원 해주는 명령어-->
+    <title>책갈피</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <!-- 테일윈드 불러오기 -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"
+            integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+
+    <style>
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+    </style>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+        }
+
+        .header {
+            background-color: #4F886D;
+            color: white;
+            padding: 10px;
+            text-align: center;
+        }
+    </style>
+    <style>
+        /* 페이징 번호 색 변경 */
+        .pagination .page-link {
+            color: #f7f7f7;
+            background-color: #4F886D;
+        }
+
+        /* 페이징과 버튼을 같은 줄에 위치시키기 위한 스타일 */
+        .pagination-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        /* 페이징과 '글쓰기' 버튼 사이의 간격 설정 */
+        .pagination-container .btn {
+            color: #f7f7f7;
+            background-color: #4F886D;
+            margin-left: 100px;
+        }
+    </style>
+</head>
 <body>
+{{>/layout/nav}}
 <form name="myform" id="myform">
 
-{{>/layout/nav}}
+    <div class="container" style="margin-top: 80px;">
 
-    <div class="container" style="margin-top:80px">
-        <h2>게시판 목록</h2>
+    <h2>책갈피 리뷰 보관소</h2>
 
         <table class="table table-hover ">
-			<colgroup>
-				<col width="8%"/>
-				<col width="*"/>
-				<col width="12%"/>
-				<col width="12%"/>
-				<col width="8%"/>
-			</colgroup>
-			
+            <colgroup>
+                <col width="8%"/>
+                <col width="*"/>
+                <col width="12%"/>
+                <col width="12%"/>
+                <col width="8%"/>
+            </colgroup>
+
             <thead class="table-secondary">
-              <tr>
+            <tr>
                 <th>번호</th>
                 <th>제목</th>
                 <th>작성자</th>
                 <th>작성일</th>
                 <th>조회수</th>
-              </tr>
+            </tr>
             </thead>
             <tbody>
-  				{{#boardList}}	  
-				<tr>
-					<td>{{boardNum}}</td>
-					<td><a href="/board/update/{{boardNum}}">{{title}}</a></td>
-					<td>{{creator}}</td>
-                    <td>{{crtTm}}</td>
-           			<td>{{hit}}</td>
-           		</tr>	
-           		{{/boardList}}
-           		
-            </tbody>
-          </table>
+            {{#boardList}}
+            <tr>
+                <td>{{boardNum}}</td>
+                <td><a href="/board/update/{{boardNum}}">{{title}}</a></td>
+                <td>{{creator}}</td>
+                <td>{{crtTm}}</td>
+                <td>{{hit}}</td>
+            </tr>
+            {{/boardList}}
 
- 
-          <ul class="pagination  justify-content-center">
- 			{{{page}}}
-          </ul>
-       
-          <div class="container mt-3" style="text-align:right;">
+            </tbody>
+        </table>
+
+
+        <ul class="pagination  justify-content-center">
+            {{{page}}}
+        </ul>
+
+        <div class="container mt-3" style="text-align:right;">
             <a href="/board/write" class="btn btn-secondary">글쓰기</a>
-          </div>
-          <br/><br/><br/>
+        </div>
+        <br/><br/><br/>
     </div>
-    </form>
+</form>
 </body>
 
 <script>
-	function goPage(pg)
-	{
-		//document.getElementById("pg").value=pg;
-		frm = document.myform;
-		frm.method="get";
-		frm.action="/board/list/"+pg;
-		frm.submit();
-	}
+    function goPage(pg)
+    {
+        //document.getElementById("pg").value=pg;
+        frm = document.myform;
+        frm.method="get";
+        frm.action="/board/list/"+pg;
+        frm.submit();
+    }
 </script>

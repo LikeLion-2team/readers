@@ -24,7 +24,7 @@ public class MainController {
 
 	@GetMapping("/")
 	public String viewMain(Model model) {
-		//게시판 갤러리 가져오는 메서드
+		//핫 게시판 핫 갤러리 가져오는 메서드
 		Map<String, List<?>> mainList = mainService.viewMain();
 		//차트에 필요한 메서드
 		Integer totalVisiteCount = mainService.totalVisiteCount();

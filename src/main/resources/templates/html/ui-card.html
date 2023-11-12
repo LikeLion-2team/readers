@@ -2,9 +2,17 @@
 <html lang="en">
 
 <head>
+	<script src="https://cdn.jsdelivr.net/npm/mustache@latest/mustache.min.js"></script>
+	<script id="mustacheData" type="x-tmpl-mustache">
+  {{#weekCount}}
+    <div>{{day}}, {{visitorCount}}</div>
+  {{/weekCount}}
+</script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Modernize Free</title>
+	<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+
 	<link rel="shortcut icon" type="image/png" href="../assets/images/logos/favicon.png" />
 	<link rel="stylesheet" href="../assets/css/styles.min.css" />
 	<link rel="stylesheet" href="path-to-bootstrap.css">
@@ -92,13 +100,8 @@
 				</ul>
 			</div>
 		</header>
-		<h1>{{totalCount}} 전체방문자 수</h1>
-		<h1>{{dayCount}} 오늘 방문자 수</h1>
-		{{#weekCount}}
 		<ul>
-			<li>{{.}}</li>
 		</ul>
-		{{/weekCount}}
 		<!-- 차트 -->
 		<div class="row">
 			<div class="col-lg-8 d-flex align-items-strech">
@@ -107,7 +110,8 @@
 						<div class="d-sm-flex d-block align-items-center justify-content-between mb-9">
 
 							<div class="mb-3 mb-sm-0">
-								<h5 class="card-title fw-semibold">차트추가!</h5>
+								<h5 class="card-title fw-semibold">주간 일일 방문자.</h5>
+								<div id="chard"></div>
 							</div>
 
 						</div>
@@ -125,7 +129,7 @@
 								<h5 class="card-title mb-9 fw-semibold">총 방문자 수</h5>
 								<div class="row align-items-center">
 									<div class="col-8">
-										<h4 class="fw-semibold mb-3">521명</h4>
+										<h4 class="fw-semibold mb-3">{{totalCount}}</h4>
 										<div class="d-flex align-items-center">
 											<div class="me-4">
 												<span
@@ -149,7 +153,7 @@
 								<div class="row alig n-items-start">
 									<div class="col-8">
 										<h5 class="card-title mb-9 fw-semibold">오늘 방문자 수 </h5>
-										<h4 class="fw-semibold mb-3">1</h4>
+										<h4 class="fw-semibold mb-3">{{dayCount}}</h4>
 									</div>
 								</div>
 							</div>
@@ -276,5 +280,115 @@
 
 
 	});
+
+	//차트 부분
+	//공통 함수 뺸 부분
+	function mustacheArry() {
+		let renderedHtml = document.getElementById('mustacheData').innerHTML;
+		let tempDiv = document.createElement('div');
+		tempDiv.innerHTML = Mustache.render(renderedHtml, {});
+		let elements = tempDiv.querySelectorAll('div');
+		return tempDiv.querySelectorAll('div');
+	}
+	//머스티치 각 일일 날짜 데이터
+	function extractDays(elements) {
+		let days = [];
+		elements.forEach(function (element) {
+			let day = element.textContent.split(',')[0].trim();
+			let date = dateFormatter(day);
+			days.push(date);
+		});
+		return days;
+	}
+	//날짜 형식 변환 00월/00일
+	function dateFormatter(day) {
+		let dateString = day.match(/\d{4}-\d{2}-\d{2}/)[0];
+		let date = new Date(dateString);
+		console.log(date);
+		let dateFormat = date.toLocaleDateString('ko-KR', {month: '2-digit', day: 'numeric'})
+		return dateFormat;
+	}
+	//머스티치 각 일일 방문자 수
+	function extractVisitorCounts(elements) {
+		let visitorCounts = [];
+		elements.forEach(function (element) {
+			let count = parseInt(element.textContent.split(',')[1].trim());
+			if (!isNaN(count)) {
+				visitorCounts.push(count);
+			}
+		});
+		return visitorCounts;
+	}
+
+
+	//머스티치 데이터 추출 필요
+	function renderTemplate(data) {
+		let template = document.getElementById('mustacheData').innerHTML;
+		let renderedHtml = Mustache.render(template, data);
+		document.getElementById('target-element').innerHTML = renderedHtml;
+	}
+
+	//
+	let elements = mustacheArry();
+	let days = extractDays(elements);
+	let visitorCounts = extractVisitorCounts(elements);
+
+	var options = {
+		series: [{
+			data: visitorCounts
+		}],
+		chart: {
+			height: 350,
+			type: 'bar',
+			events: {
+				click: function (chart, w, e) {
+				}
+			},
+			xaxis: {
+				lines: {
+					show: false,
+				}
+			},
+			yaxis: {
+				lines: {
+					show: false,
+				}
+			},
+
+		},
+		plotOptions: {
+			bar: {
+				columnWidth: '45%',
+				distributed: true,
+			}
+		},
+		dataLabels: {
+			enabled: false
+		},
+		legend: {
+			show: false
+		},
+		xaxis: {
+			categories: days,
+
+			labels: {
+				style: {
+					fontSize: '12px'
+				}
+			}
+		},
+		axisBorder: {
+			show: false,
+		}, axisTicks: {
+			show: false,
+		},
+		tooltip: {
+			enabled: false, //막대그래프 상세 수치 보이기... 방문자가 적어서 false로 했습니다.
+		}
+
+	};
+
+	var chart = new ApexCharts(document.querySelector("#chart"), options);
+	chart.render();
 
 </script>

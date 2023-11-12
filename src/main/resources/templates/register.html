@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="/js/common.js"></script>
     <meta charset="utf-8">
     <title>Insert title here</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,19 +14,6 @@
 </head>
 <body>
 
-<nav class="navbar navbar-expand-sm bg-light navbar-light">
-    <ul class="navbar-nav">
-        <li class="nav-item active">
-            <a class="nav-link" href="/sms/list">게시판</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="">상품</a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="">Logout</a>
-        </li>
-    </ul>
-</nav>
 
 <div class="container mt-3">
     <h1>회원가입</h1>
@@ -33,9 +21,13 @@
     <form id="myform" name="myform">
         <div class="input-group mb-3">
             <input type="text" class="form-control" placeholder="아이디" name="id" id="id">
-            <div class="input-group-append">
-                <button class="btn btn-success" type="submit">중복체크</button>
+            <div id="idcheck">
+
             </div>
+            <div class="input-group-append">
+                <button class="btn btn-success" type="button" id="btnIdcheck">중복체크</button>
+            </div>
+
         </div>
 
         <div class="input-group mb-3">
@@ -95,8 +87,36 @@
                     }
                 })
                 .fail((res, error, status) => {
-                    console.log(error);
                 })
         });
+
+        // 클릭 이벤트
+        $("#btnIdcheck").click(() => {
+            $("#idcheck").html("");
+            // id 중복체크
+            let user_id = $("#id").val();
+            $.ajax({
+                url: "/user/idcheck",
+                data: {"id": user_id},
+                dataType: "json",
+                method: "get"
+            }).done((res) => {
+                const failMsg = " 이 아이디는 사용 불가능 합니다.";
+                const successMsg = " 이 아이디는 사용 가능합니다.";
+                if (res.result !== user_id) {
+                    console.log(res.result);
+                    $("#idcheck").html(user_id + successMsg);
+                    //더이상 id 입력하지 못 하게
+                    // attr() 메소드는 jquery 1에서 사용하던 것 prop() 메소드를 사용하자
+                    $("#idcheck").prop("readonly", true); //disabled: 서버로 데이터가 전송되지 않는다. 사용에 주의
+                    $("#btnIdcheck").prop("disabled", true); //버튼 요소와 같이 서버로 데이터를 보내지 않는 경우 disabled를 사용할 수 있다.
+
+                } else {
+                    $("#idcheck").html(user_id + failMsg);
+                }
+            }).fail((res, error, status) => {
+                console.log(error);
+            });
+        })
     });
 </script>
